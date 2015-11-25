@@ -1,0 +1,4 @@
+Sales Ledger Requirements
+- Register Sale, with associated additional COS (When relevant) and associate inventory item
+- Reverse Sale, deal with associated additional COS (When relevant) and deal with associate inventory item
+  depending from consequences of reverse sale
