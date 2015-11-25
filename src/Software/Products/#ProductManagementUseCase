@@ -1,0 +1,8 @@
+Product Management use case - Purpose is to mantain a database of unique products
+
+1 - A new product is available to be sold.
+2 - Products should be given a unique ID.
+3 - Products should be added to the PRODUCT table.
+    3.1 - Multiple products should be imported from a file.
+    3.2 - A single product should be created from the interface. @Ticket - Medium
+4 - Message confirming products imported is printed. @Ticket - Medium

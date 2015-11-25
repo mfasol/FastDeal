@@ -1,0 +1,33 @@
+PurchaseLedger use case - Purpose is to maintain the purchase ledger
+
+Requirements:
+1 - Persist transactions that relate to the purchase ledger (Invoice, credit notes, estimates, etc);
+2 - Retrieve transactions;
+3 - Reverse transactions;
+
+Persist transactions use case - requirement 1
+
+1 - A transaction that affects the purchase ledger arises.
+2 - Add transaction to the general ledger. //TODO
+3 - Add transaction to the VAT ledger.     //TODO
+4 - Add invoice reference and line reference invoice line.
+    4.1 - If inventory relevant, reflect the transaction in the relevant inventory.
+    4.2 - If Cos Inventory relevant, update the COS of the relevant inventory items.
+5 - Persist transaction in Purchase ledge database and inventory (When relevant).
+
+
+Retrieve transaction use case - requirement 2
+
+1 - A transaction line, or a transaction line group, needs to be retrieved from the database
+2 - The transaction needs to be passed in a list
+
+
+Reverse transactions use case - requirement 3
+
+1 - A transaction group (all the transactions with the same group id) needs to be reversed.
+2 - Tre transaction group is retrieved.
+3 - Transactions are cloned with relevant numeric values reversed.
+4 - Cost effects of the reversal, if applicable, are also reflected to the cost of inventory items.
+    4.1 - The physical items in the inventory are not affected from rev reversals.
+5 - The new transactions are persisted in the database.
+

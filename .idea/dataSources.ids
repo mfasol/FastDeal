@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="H2 - FastDeal" uuid="58a6cb21-1bc9-4393-af6a-359f59d1db98">
+    <database-info product="H2" version="1.3.176 (2014-04-05)" jdbc-version="4.0" driver-name="H2 JDBC Driver" driver-version="1.3.176 (2014-04-05)">
+      <identifier-quote-string>&quot;</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact"/>
+    <schema name="PUBLIC" catalog="FASTDEAL"/>
+    <table name="INVENTORY_ITEMS_UK_AMAZON" schema="PUBLIC" catalog="FASTDEAL" type="TABLE">
+      <column name="INTERNAL_INVOICE_REFERENCE_KEY" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="INTERNAL_INVOICE_REFERENCE_LINE" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="ITEM_NUMBER" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="CONCATENATED_PRIMARY_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="INVOICE_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="false" jdbcType="-2"/>
+      <column name="INVOICE_LINE_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="false" jdbcType="-2"/>
+      <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="ITEM_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="false" jdbcType="8"/>
+      <column name="SINGLE_ITEM_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="false" jdbcType="-2"/>
+      <column name="ITEM_DATE" sqlType="DATE" precision="8" scale="0" nullable="false" jdbcType="91"/>
+      <column name="INVENTORY_ITEM_STATUS" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="INVENTORY_ITEM_CURRENCY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="INVENTORY_ITEM_STORE_TIMESTAMP" sqlType="TIMESTAMP" precision="23" scale="10" nullable="false" jdbcType="93"/>
+      <column name="INVENTORY_TRANSACTION_LOCKED" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16" def="RkFMU0U="/>
+      <primary-key name="CONSTRAINT_3" columns="INTERNAL_INVOICE_REFERENCE_KEY,INTERNAL_INVOICE_REFERENCE_LINE,ITEM_NUMBER"/>
+      <foreign-key name="INVENTORY_ITEMS_UK_AMAZON___FK" columns="PRODUCT_KEY" ref-table="PRODUCT" ref-schema="PUBLIC" ref-catalog="FASTDEAL" ref-columns="SELLER_SKU" update-rule="1" delete-rule="1" deferrability="2"/>
+      <index name="INVENTORY_ITEMS_CONCATENATED_PRIMARY_KEY_UINDEX" unique="true" columns="CONCATENATED_PRIMARY_KEY"/>
+      <index name="INVENTORY_ITEMS_SINGLE_ITEM_UUID_UINDEX" unique="true" columns="SINGLE_ITEM_UUID"/>
+      <index name="INVENTORY_ITEMS_UK_AMAZON___FK_INDEX_D" unique="false" columns="PRODUCT_KEY"/>
+    </table>
+    <table name="PRODUCT" schema="PUBLIC" catalog="FASTDEAL" type="TABLE">
+      <column name="ASIN" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="EAN" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="SELLER_SKU" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="ITEM_NAME" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="OPEN_DATE" sqlType="DATE" precision="8" scale="0" nullable="false" jdbcType="91"/>
+      <column name="MANUFACTURER" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="STATUS" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>
+      <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="STORE_TIMESTAMP" sqlType="TIMESTAMP" precision="23" scale="10" nullable="true" jdbcType="93"/>
+      <column name="STORE_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="true" jdbcType="-2"/>
+      <primary-key name="PRODUCT_PRODUCT_KEY_PK" columns="PRODUCT_KEY"/>
+      <exported-key name="INVENTORY_ITEMS_UK_AMAZON___FK" table="INVENTORY_ITEMS_UK_AMAZON" schema="PUBLIC" catalog="FASTDEAL" columns="PRODUCT_KEY"/>
+      <index name="PRODUCT_ASIN_UINDEX" unique="true" columns="ASIN"/>
+      <index name="PRODUCT_SELLER_SKU_UINDEX" unique="true" columns="SELLER_SKU"/>
+    </table>
+    <table name="PURCHASE_LEDGER" schema="PUBLIC" catalog="FASTDEAL" type="TABLE">
+      <column name="TRANSACTION_DATE" sqlType="DATE" precision="8" scale="0" nullable="false" jdbcType="91"/>
+      <column name="EXTERNAL_TRANSACTION_REFERENCE" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="SUPPLIER_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="DESCRIPTION" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="QUANTITY" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="PRICE" sqlType="DOUBLE" precision="17" scale="0" nullable="false" jdbcType="8"/>
+      <column name="VAT_CODE" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="VAT_AMOUNT" sqlType="DOUBLE" precision="17" scale="0" nullable="false" jdbcType="8" def="MA=="/>
+      <column name="SHIPPED_FROM_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SHIPPED_TO_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SHIPPED_TO_CHANNEL" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TRANSACTION_LINE_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="false" jdbcType="-2"/>
+      <column name="INVENTORY_RELEVANT" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16"/>
+      <column name="INTERNAL_TRANSACTION_REFERENCE_KEY" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="INTERNAL_TRANSACTION_REFERENCE_LINE" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="INVOICE_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="false" jdbcType="-2"/>
+      <column name="CURRENCY" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>
+      <column name="PURCHASE_LEDGER_TRANSACTION_STORE_TIMESTAMP" sqlType="TIMESTAMP" precision="23" scale="10" nullable="false" jdbcType="93"/>
+      <column name="TRANSACTION_TYPE" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="UPDATE_LOCK" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16" def="RkFMU0U="/>
+      <column name="INVENTORY_COS_RELEVANT" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16"/>
+      <column name="TRANSACTION_GROUP_ALLOCATION" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="TRANSACTION_LINE_ALLOCATION" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="PURCHASE_LEDGER_INOICE_LINE_UUID_PK" columns="TRANSACTION_LINE_UUID"/>
+    </table>
+  </data-source>
+</component>

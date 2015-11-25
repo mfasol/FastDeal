@@ -1,0 +1,16 @@
+The purpose of this software is to manage the inventory and part of the accounting processes of Fast Deal Ltd.
+
+The System should:
+
+- Produce a summary of the inventory;
+
+- Register stock movements (increase and decreases);
+
+- Evaluate stock on a FIFO base;
+
+- Calculate cost of sales;
+
+Table Needed:
+
+- Products Table (Product ID, ASIN, EAN, INTRASTAT PURCHASE CODE, INTRASTAT SALE CODE, SKU, PRODUCT DESCRIPTION,
+    Size)

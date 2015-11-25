@@ -1,0 +1,18 @@
+Inventory Management use case - Purpose is to maintain an inventory that allows FIFO accounting for sales and
+    Inventory valuation
+
+
+Products purchase use case
+
+1 - Inventory Items are purchased in bulk through an invoice line.
+2 - Inventory items need to be persisted as single records in the inventory Items database.
+3 - Inventory items need to have a unique ID that can be ordered by chronological criteria.
+4 - Inventory need to have an overall shipment reference and a product shipment reference. These 2 references will be
+    used to access the record for calcolating the costs
+  - Database tables need to reflect where the stock is physically held. Division needs to be by country and
+    by stock holding entity.
+
+2 - Add
+3 - Business information have be added to the inventory item: @Ticket - High
+    3.1 - Add overall cost per item;
+    3.2 - Add Geographic shipment place
