@@ -1,4 +1,9 @@
 Sales Ledger Requirements
-- Register Sale, with associated additional COS (When relevant) and associate inventory item
-- Reverse Sale, deal with associated additional COS (When relevant) and deal with associate inventory item
-  depending from consequences of reverse sale
+1 - Register Sale, with associated additional COS (When relevant) and associate inventory item
+2 - Reverse Sale, deal with associated additional COS (When relevant) and deal with associate inventory item
+  depending from consequences of reverse sale.
+
+
+Register Sales Use case - step 1
+1 - A customer purchases one or more products from FastDeal inventory
+2 - The
