@@ -1,9 +1,17 @@
 Sales Ledger Requirements
-1 - Register Sale, with associated additional COS (When relevant) and associate inventory item
-2 - Reverse Sale, deal with associated additional COS (When relevant) and deal with associate inventory item
+1 - Register Sale, with associated additional COS (When relevant) and associate inventory item.
+2 - Reverse Sale, deal with associated additional COS (When relevant) and deal with associate inventory item.
   depending from consequences of reverse sale.
 
 
 Register Sales Use case - step 1
-1 - A customer purchases one or more products from FastDeal inventory
-2 - The
+1 - A customer purchases one or more products from a specific FastDeal inventory.
+2 - Customer Country is identified (export needs to be taken in consideration; amazon UK might sell a product in Malta).
+3 - Sales channel is identified.
+4 - Sales Channel country is identified.
+5 - Specific inventory that provides the item is identified.
+6 - The customer receives the oldest item in inventory of any product purchased.
+    6.1 - the relevant inventory item cost is increased by the additional cost of sale attached to the sale.
+7 - Gross profit of the sale is calculated (Sale Price - overall cost of sale).
+8 - Sale line is persisted in the sales database (which, like the purchase ledger, is a global, single
+    persistence unit).
