@@ -5,4 +5,7 @@ package Software.SalesLedger;
  */
 public class SalesLineImport
 {
+    public void method()
+    {
+    }
 }
