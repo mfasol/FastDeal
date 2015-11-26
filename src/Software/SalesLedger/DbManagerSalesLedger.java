@@ -5,7 +5,15 @@ package Software.SalesLedger;
  */
 public class DbManagerSalesLedger
 {
-    public void method()
+    public void persistSaleLine()
+    {
+    }
+
+    public void reverseSaleLine()
+    {
+    }
+
+    public void retrieveSaleLine()
     {
     }
 }
