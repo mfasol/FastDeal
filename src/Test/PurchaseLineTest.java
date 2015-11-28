@@ -19,7 +19,6 @@ public class PurchaseLineTest
     public void testGetProperties() throws Exception
     {
         System.out.println(saleLine.getProperties());
-
     }
 
     @Test
@@ -35,6 +34,5 @@ public class PurchaseLineTest
         System.out.println(saleLine.getProperty("Date"));
         saleLine.setProperty("Date","01/01/2225");
         System.out.println(saleLine.getProperty("Date"));
-
     }
 }
