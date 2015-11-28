@@ -20,7 +20,7 @@ public class DbManagerInventoryItemsTest
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
-            "seller-sku" ,5.00, Countries.UK, SaleChannels.AMAZON, "31/10/2015");
+            "seller-sku" ,5.00, Countries.GB, SaleChannels.AMAZON, "31/10/2015");
 
     DbManagerInventoryItems mockDatabase = mock(DbManagerInventoryItems.class);
     DbManagerInventoryItems dbManagerPurchaseLedger = new DbManagerInventoryItems();
@@ -58,9 +58,6 @@ public class DbManagerInventoryItemsTest
         mockDatabase.updateTransactionGroupCos(1 , 5.65);
 
         verify(mockDatabase, times(1)).updateTransactionGroupCos(1 , 5.65);
-
-
-
     }
 
     @Test

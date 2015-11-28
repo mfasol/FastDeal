@@ -13,8 +13,7 @@ Register Sales Use case - Requirement 1
 5 - Specific inventory that provides the item is identified.
 6 - The customer receives the oldest item in inventory of any product purchased.
     6.1 (OPTIONAL) - the relevant inventory item cost is increased by the additional cost of sale attached to the sale.
-7 - Gross profit of the sale is calculated (Sale Price - overall cost of sale).
-8 - Sale line is persisted in the sales database (which, like the purchase ledger, is a global, single
+7 - Sale line is persisted in the sales database (which, like the purchase ledger, is a global, single
     persistence unit).
 
 
