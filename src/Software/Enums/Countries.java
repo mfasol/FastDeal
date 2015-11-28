@@ -5,7 +5,7 @@ package Software.Enums;
  */
 public enum  Countries
 {
-    UK,
+    GB,
     SPAIN,
     ITALY,
     GERMANY,
