@@ -11,15 +11,15 @@ import java.util.Map;
 /**
  * Created by Michele on 26/11/2015.
  */
-public class SaleLedgerLine
+public class SalesLedgerLine
 {
     private Map properties = new HashMap();
 
-    public SaleLedgerLine(String date, String channelId, String productId, String transactionCity,
-                          String transactionPostCode, Countries shipToCountry, int quantity,
-                          double transactionPrice, double transactionAssociatedCos, SaleChannels transactionChannel,
-                          Countries countryTransactionChannel, Currencies currency, int transactionGroupId,
-                          int transactionLineId, SaleLedgerTransactionType transactionLineStatus, String itemId)
+    public SalesLedgerLine(String date, String channelId, String productId, String transactionCity,
+                           String transactionPostCode, Countries shipToCountry, int quantity,
+                           double transactionPrice, double transactionAssociatedCos, SaleChannels transactionChannel,
+                           Countries countryTransactionChannel, Currencies currency, int transactionGroupId,
+                           int transactionLineId, SaleLedgerTransactionType transactionLineStatus, String itemId)
     {
         properties.put("date", date);
         properties.put("channelSaleId", channelId);

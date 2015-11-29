@@ -25,7 +25,7 @@ public class TransactionLineImport extends Importer
     InventoryItem inventoryItem;
 
     String referenceChecker = "";
-    String currentReference;
+
 
     int invoiceNumber = new DbManagerPurchaseLedger().internalTransactionNumberGenerator();
     int lineCounter = 1;
@@ -72,8 +72,7 @@ public class TransactionLineImport extends Importer
             {
                 // if it is the same, only the lineCounter need to be increased
                 lineCounter++;
-            }            
-            
+            }
 
             if (csvRecord.get(INVENTORY_RELEVANT).equals("YES")) 
             {

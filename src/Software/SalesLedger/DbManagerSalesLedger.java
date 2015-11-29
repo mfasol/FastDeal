@@ -14,4 +14,9 @@ public class DbManagerSalesLedger implements DbManagerInterface
     {
 
     }
+
+    public int internalTransactionNumberGenerator()
+    {
+        return 0;
+    }
 }
