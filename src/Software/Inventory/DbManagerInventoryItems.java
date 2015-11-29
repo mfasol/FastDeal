@@ -3,12 +3,12 @@ package Software.Inventory;
 import DbServer.ConnectionData;
 import DbServer.DbManagerInterface;
 import Software.Enums.Countries;
+import Software.Enums.InventoryItemStatus;
 import Software.Enums.SaleChannels;
 import Software.Importable;
 
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 
 import Software.PurchaseLedger.DbManagerPurchaseLedger;
+
 import java.util.UUID;
 
 
@@ -29,6 +30,10 @@ public class DbManagerInventoryItems implements DbManagerInterface
     private InventoryItem inventoryItem;
     private PreparedStatement preparedStatement;
     final String TABLE_NAME = "INVENTORY_ITEMS";
+    private String country;
+    private String channel;
+    private String queryTableName;
+
 
     private static final int ROUNDING_PRECISION = 12;
 
@@ -106,10 +111,12 @@ public class DbManagerInventoryItems implements DbManagerInterface
             Connection connection = DriverManager.getConnection(connectionData.getCONNECTION_PATH());
 
             preparedStatement = connection.prepareStatement("UPDATE " + queryTableName +
-                    " SET ITEM_COS = ROUND(ITEM_COS + (?),12) WHERE  INTERNAL_INVOICE_REFERENCE_KEY = (?)");
+                    " SET ITEM_COS = ROUND(ITEM_COS + (?),12) WHERE  INTERNAL_INVOICE_REFERENCE_KEY = (?) " +
+                    "AND INVENTORY_TRANSACTION_LOCKED = (?)");
 
             preparedStatement.setDouble(1, cosPerUnit);
             preparedStatement.setInt(2, transactionGroupKey);
+            preparedStatement.setBoolean(3, false);
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -130,7 +137,7 @@ public class DbManagerInventoryItems implements DbManagerInterface
         String channelString = dbManagerPurchaseLedger.retrieveTransactionLineToChannel(transactionGroupKey,1);
         SaleChannels saleChannel = SaleChannels.valueOf(channelString);
         cosPerUnit = round(cosPerUnit);
-        String queryTableName = TABLE_NAME+"_"+country+"_"+saleChannel;
+        queryTableName = TABLE_NAME+"_"+country+"_"+saleChannel;
 
         try
         {
@@ -138,12 +145,14 @@ public class DbManagerInventoryItems implements DbManagerInterface
             Connection connection = DriverManager.getConnection(connectionData.getCONNECTION_PATH());
 
             preparedStatement = connection.prepareStatement("UPDATE " + queryTableName +
-                    " SET ITEM_COS = ROUND (ITEM_COS + (?), 12) WHERE  INTERNAL_INVOICE_REFERENCE_KEY = (?) AND " +
-                    "INTERNAL_INVOICE_REFERENCE_LINE = (?)");
+                    " SET ITEM_COS = ROUND (ITEM_COS + (?), " + ROUNDING_PRECISION + ") WHERE  " +
+                    "INTERNAL_INVOICE_REFERENCE_KEY = (?) AND INTERNAL_INVOICE_REFERENCE_LINE = (?)" +
+                    " AND INVENTORY_TRANSACTION_LOCKED = (?)");
 
             preparedStatement.setDouble(1, cosPerUnit);
             preparedStatement.setInt(2, transactionGroupKey);
             preparedStatement.setInt(3, transactionLineKey);
+            preparedStatement.setBoolean(4, false);
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -154,9 +163,67 @@ public class DbManagerInventoryItems implements DbManagerInterface
         }
     }
 
-    public void updateInventroryItemCos(String concatenatedKey){} //TODO
+    public void updateInventoryItemCos(String concatenatedKey, String itemUUID, double cos, String country,
+                                       String saleChannel)
+    {
+        queryTableName = TABLE_NAME+"_"+country+"_"+saleChannel;
+        try
+        {
+            Class.forName(connectionData.getCLASS_FOR_NAME());
+            Connection connection = DriverManager.getConnection(connectionData.getCONNECTION_PATH());
 
-    public void getItemForSale(String productKey){} //TODO
+            preparedStatement = connection.prepareStatement("UPDATE " + queryTableName +
+                    " SET ITEM_COS = ROUND (ITEM_COS + (?), " + ROUNDING_PRECISION + ") WHERE " +
+                    "CONCATENATED_PRIMARY_KEY = (?) AND SINGLE_ITEM_UUID = (?) AND " +
+                    "INVENTORY_TRANSACTION_LOCKED = (?)");
+
+            preparedStatement.setDouble(1, cos);
+            preparedStatement.setString(2, concatenatedKey);
+            preparedStatement.setString(3, itemUUID);
+            preparedStatement.setBoolean(4, false);
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        }
+        catch (ClassNotFoundException | SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+
+    } //TODO
+
+    public InventoryItem getItemForSale(String productKey, String country, String saleChannel)
+    {
+        queryTableName = TABLE_NAME+"_"+country+"_"+saleChannel;
+        try
+        {
+            Class.forName(connectionData.getCLASS_FOR_NAME());
+            Connection connection = DriverManager.getConnection(connectionData.getCONNECTION_PATH());
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM " + queryTableName +
+                    " WHERE SINGLE_ITEM_UUID = (SELECT MIN(SINGLE_ITEM_UUID) " +
+                    "FROM " + queryTableName + " WHERE PRODUCT_KEY = (?) AND " +
+                    "INVENTORY_ITEM_STATUS = (?))");
+
+            preparedStatement.setString(1, productKey);
+            preparedStatement.setString(2, String.valueOf(InventoryItemStatus.AVAILABLE_FOR_SALE));
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next())
+            {
+                inventoryItem = toInventoryItem(resultSet);
+            }
+            resultSet.close();
+            preparedStatement.close();
+
+        } catch (ClassNotFoundException | SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return inventoryItem;
+    }
 
     public InventoryItem toInventoryItem(ResultSet resultSet)
     {
@@ -173,7 +240,7 @@ public class DbManagerInventoryItems implements DbManagerInterface
                             invoiceLineNum)),
                     SaleChannels.valueOf(dbManagerPurchaseLedger.retrieveTransactionLineToChannel(invoiceNum,
                             invoiceLineNum)),
-                    resultSet.getString("ITEM.DATE"));
+                    resultSet.getString("ITEM_DATE"));
         }
         catch (SQLException e)
         {

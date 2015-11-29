@@ -23,7 +23,7 @@ public class DbManagerInventoryItemsTest
             "seller-sku" ,5.00, Countries.GB, SaleChannels.AMAZON, "31/10/2015");
 
     DbManagerInventoryItems mockDatabase = mock(DbManagerInventoryItems.class);
-    DbManagerInventoryItems dbManagerPurchaseLedger = new DbManagerInventoryItems();
+    DbManagerInventoryItems dbManagerInventoryItems = new DbManagerInventoryItems();
 
     @Before
     public void setUp() throws Exception
@@ -65,5 +65,23 @@ public class DbManagerInventoryItemsTest
     {
 
 
+    }
+
+    @Test
+    public void testUpdateInventoryItemCos() throws Exception
+    {
+        mockDatabase.updateInventoryItemCos("1-1-1", "c8afe021-8e52-11e5-80d9-1211ca9464ab", 5.5, "GB", "AMAZON");
+
+        verify(mockDatabase, times(1)).updateInventoryItemCos("1-1-1", "c8afe021-8e52-11e5-80d9-1211ca9464ab", 5.5,
+                "GB", "AMAZON");
+    }
+
+    @Test
+    public void testGetItemForSale() throws Exception
+    {
+        InventoryItem inventoryItem = dbManagerInventoryItems.getItemForSale(
+                "Proraso Crema Liquida Anti - Irritazione","GB","AMAZON");
+
+        System.out.println(inventoryItem.toString());
     }
 }

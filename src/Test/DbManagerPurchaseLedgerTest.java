@@ -56,7 +56,7 @@ public class DbManagerPurchaseLedgerTest
     {
         int result = dbManagerPurchaseLedger.retrieveTransactionGroupQuantity(1);
         System.out.println("The total quantity for invoice 1 is " + result);
-        assert (result == 0);
+        assert (result == 732);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class DbManagerPurchaseLedgerTest
     {
         int result = dbManagerPurchaseLedger.retrieveTransactionLineQuantity(1,1);
         System.out.println("The total quantity for invoice 1, line 1 is " + result);
-        assert (result == 0);
+        assert (result == 96);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class DbManagerPurchaseLedgerTest
     @Test
     public void testRetrieveInvoiceLineShippedToCountry() throws Exception
     {
-        assert dbManagerPurchaseLedger.retrieveTransactionLineToCountry(1,1).equals("UK");
+        assert dbManagerPurchaseLedger.retrieveTransactionLineToCountry(1,1).equals("GB");
     }
 
     @Test
@@ -97,8 +97,7 @@ public class DbManagerPurchaseLedgerTest
     @Test
     public void testReverseTransaction() throws Exception
     {
-        dbManagerPurchaseLedger.reverseTransaction(2);
-
+        mockDatabase.reverseTransaction(4);
     }
 
     @Test

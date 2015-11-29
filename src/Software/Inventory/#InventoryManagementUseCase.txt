@@ -1,6 +1,10 @@
 Inventory Management use case - Purpose is to maintain an inventory that allows FIFO accounting for sales and
     Inventory valuation
 
+Inventory Requirements:
+- Store individual items;
+- Allocate the individual Item cost of sale
+
 
 Products purchase use case
 
