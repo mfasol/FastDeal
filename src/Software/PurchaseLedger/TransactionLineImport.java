@@ -50,8 +50,6 @@ public class TransactionLineImport extends Importer
     private final int ASSOCIATED_TRANSACTION_LINE_KEY = 16;
     private final int TRANSACTION_TYPE = 17;
 
-
-
     @Override
     public void completeImportProcess()
     {
@@ -173,7 +171,6 @@ public class TransactionLineImport extends Importer
                     cosPerUnit);
         }
     }
-
 
     private void importStockRelevantInvoiceLine(CSVRecord csvRecord)
     {

@@ -37,8 +37,6 @@ public abstract class Importer
         {
             e.printStackTrace();
         }
-
-
     }
 
     protected abstract void completeImportProcess();

@@ -1,19 +1,17 @@
 package Software.SalesLedger;
 
+import DbServer.DbManagerInterface;
+import Software.Importable;
+
 /**
  * Created by Michele on 26/11/2015.
  */
-public class DbManagerSalesLedger
+public class DbManagerSalesLedger implements DbManagerInterface
 {
-    public void persistSaleLine()
-    {
-    }
 
-    public void reverseSaleLine()
+    @Override
+    public void persistTarget(Importable importable)
     {
-    }
 
-    public void retrieveSaleLine()
-    {
     }
 }

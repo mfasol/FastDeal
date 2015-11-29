@@ -3,6 +3,7 @@ package Software;
 import Software.Products.ProductImport;
 import Software.Products.DbManagerProducts;
 import Software.PurchaseLedger.TransactionLineImport;
+import Software.SalesLedger.SalesLineImport;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,15 +22,15 @@ public class RootGui extends JFrame
     private static final int FRAME_HEIGHT = 250;
     private JLabel rateLabel;
     private JButton importProductsButton;
-    private JButton importInvoiceLines;
-
-
+    private JButton importPurchaseLedger;
+    private JButton importSalesLedger;
 
     public RootGui() throws IOException, ParseException
     {
         createTextField();
         createImportProductsButton();
-        createRetrieveProductButton();
+        createPurchaseLedgerImportButton();
+        createSalesLedgerImportButton();
         createPanel();
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
     }
@@ -38,6 +39,7 @@ public class RootGui extends JFrame
     {
         rateLabel = new JLabel("Import Products: ");
     }
+
     private void createImportProductsButton() throws IOException, ParseException
     {
         ProductImport productImport = new ProductImport();
@@ -45,20 +47,34 @@ public class RootGui extends JFrame
 
         // lambda function to create actionListener
 
-        importProductsButton.addActionListener((ActionEvent importProducts) -> { productImport.importData() ;});
+        importProductsButton.addActionListener((ActionEvent importProducts) ->
+        {
+            productImport.importData();
+        });
     }
 
-    private void createRetrieveProductButton()
+    private void createPurchaseLedgerImportButton()
     {
         TransactionLineImport transactionLineImport = new TransactionLineImport();
-        importInvoiceLines = new JButton("Import Invoice Product");
+        importPurchaseLedger = new JButton("Import Invoice Product");
 
         // lambda function to create actionListener
-        DbManagerProducts dbManagerProducts = new DbManagerProducts();
-        importInvoiceLines.addActionListener((ActionEvent importInvoiceLines) -> {
-
+        importPurchaseLedger.addActionListener((ActionEvent importInvoiceLines) ->
+        {
             transactionLineImport.importData();
         });
+    }
+
+    private void createSalesLedgerImportButton()
+    {
+        SalesLineImport salesLineImport = new SalesLineImport();
+        importSalesLedger = new JButton("Import Sales");
+
+        importSalesLedger.addActionListener((ActionEvent importSales) ->
+        {
+            salesLineImport.importData();
+        });
+
     }
 
     private void createPanel()
@@ -66,8 +82,8 @@ public class RootGui extends JFrame
         JPanel panel = new JPanel();
         panel.add(rateLabel);
         panel.add(importProductsButton);
-        panel.add(importInvoiceLines);
+        panel.add(importPurchaseLedger);
+        panel.add(importSalesLedger);
         add(panel);
     }
-
 }
