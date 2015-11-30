@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 public class DbManagerPurchaseLedgerTest
 {
     Importable importableTest = new PurchaseLedgerTransactionLine("31/10/2015", "supplierID", "externalAccountingReference",
-            "description", "productKey", 700, 1.50, 0.3, "vatCode", Countries.ITALY , Countries.GB,
+            "description", "productKey", 700, 1.50, 0.3, "vatCode", Countries.IT , Countries.GB,
             SaleChannels.AMAZON, 1, 1,
             java.util.UUID.fromString(String.valueOf(new UUID())),
             Currencies.GBP, PurchaseLedgerTransactionType.INVOICE);
@@ -110,7 +110,7 @@ public class DbManagerPurchaseLedgerTest
         assert (testLine.getLineUuid().toString().equals("c8afe020-8e52-11e5-80d9-1211ca9464ab"));
         assert (testLine.getInvoiceUuid().toString().equals("c8afb910-8e52-11e5-80d9-1211ca9464ab"));
         assert (testLine.getPurchaseLedgerTransactionType().equals(PurchaseLedgerTransactionType.ACCRUAL));
-        assert (testLine.getShippedFromCountry().equals(Countries.ITALY));
+        assert (testLine.getShippedFromCountry().equals(Countries.IT));
         assert (testLine.getShippedToCountry().equals(Countries.GB));
         assert (testLine.getShippedToChannel().equals(SaleChannels.AMAZON));
         assert (testLine.getTransactionDate().equals("2015-10-28"));

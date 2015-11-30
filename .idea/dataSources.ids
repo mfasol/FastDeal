@@ -90,6 +90,7 @@
       <column name="ITEM_ID" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="TRANSACTION_TIMESTAMP" sqlType="TIMESTAMP" precision="23" scale="10" nullable="false" jdbcType="93"/>
       <column name="TRANSACTION_LOCK" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16"/>
+      <column name="ITEM_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="false" jdbcType="-2"/>
       <primary-key name="CONSTRAINT_9" columns="TRANSACTION_LINE_UUID"/>
       <foreign-key name="SALES_LEDGER_PRODUCT__FK" columns="PRODUCT_KEY" ref-table="PRODUCT" ref-schema="PUBLIC" ref-catalog="FASTDEAL" ref-columns="SELLER_SKU" update-rule="1" delete-rule="1" deferrability="2"/>
       <index name="SALES_LEDGER_PRODUCT__FK_INDEX_4" unique="false" columns="PRODUCT_KEY"/>

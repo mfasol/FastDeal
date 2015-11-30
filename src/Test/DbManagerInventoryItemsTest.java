@@ -1,6 +1,7 @@
 package Test;
 
 import Software.Enums.Countries;
+import Software.Enums.InventoryItemStatus;
 import Software.Enums.SaleChannels;
 import Software.Importable;
 import Software.Inventory.DbManagerInventoryItems;
@@ -8,6 +9,8 @@ import Software.Inventory.InventoryItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -70,18 +73,30 @@ public class DbManagerInventoryItemsTest
     @Test
     public void testUpdateInventoryItemCos() throws Exception
     {
-        mockDatabase.updateInventoryItemCos("1-1-1", "c8afe021-8e52-11e5-80d9-1211ca9464ab", 5.5, "GB", "AMAZON");
+        mockDatabase.updateInventoryItemCos("1-1-1", UUID.fromString("c8afe021-8e52-11e5-80d9-1211ca9464ab"),
+                5.5, "GB", "AMAZON");
 
-        verify(mockDatabase, times(1)).updateInventoryItemCos("1-1-1", "c8afe021-8e52-11e5-80d9-1211ca9464ab", 5.5,
-                "GB", "AMAZON");
+        verify(mockDatabase, times(1)).updateInventoryItemCos("1-1-1",
+                UUID.fromString("c8afe021-8e52-11e5-80d9-1211ca9464ab"), 5.5, "GB", "AMAZON");
     }
 
     @Test
     public void testGetItemForSale() throws Exception
     {
         InventoryItem inventoryItem = dbManagerInventoryItems.getItemForSale(
-                "Proraso Crema Liquida Anti - Irritazione","GB","AMAZON");
+                "Proraso Sapone Tubo Rinfrescante","GB","AMAZON");
 
         System.out.println(inventoryItem.toString());
+    }
+
+    @Test
+    public void testUpdateInventoryItemStatus() throws Exception
+    {
+        mockDatabase.updateInventoryItemStatus("1-1-1", UUID.fromString("c8afe021-8e52-11e5-80d9-1211ca9464ab"),
+                InventoryItemStatus.SOLD, "GB", "AMAZON");
+
+        verify(mockDatabase, times(1)).updateInventoryItemStatus("1-1-1",
+                UUID.fromString("c8afe021-8e52-11e5-80d9-1211ca9464ab"), InventoryItemStatus.SOLD, "GB", "AMAZON");
+
     }
 }

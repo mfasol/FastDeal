@@ -163,7 +163,7 @@ public class DbManagerInventoryItems implements DbManagerInterface
         }
     }
 
-    public void updateInventoryItemCos(String concatenatedKey, String itemUUID, double cos, String country,
+    public void updateInventoryItemCos(String concatenatedKey, UUID itemUUID, double cos, String country,
                                        String saleChannel)
     {
         queryTableName = TABLE_NAME+"_"+country+"_"+saleChannel;
@@ -179,7 +179,7 @@ public class DbManagerInventoryItems implements DbManagerInterface
 
             preparedStatement.setDouble(1, cos);
             preparedStatement.setString(2, concatenatedKey);
-            preparedStatement.setString(3, itemUUID);
+            preparedStatement.setString(3, String.valueOf(itemUUID));
             preparedStatement.setBoolean(4, false);
 
             preparedStatement.executeUpdate();
@@ -192,6 +192,35 @@ public class DbManagerInventoryItems implements DbManagerInterface
 
 
     } //TODO
+
+    public void updateInventoryItemStatus(String concatenatedKey, UUID itemUUID,
+                                          InventoryItemStatus inventoryItemStatus, String country, String saleChannel)
+    {
+        queryTableName = TABLE_NAME+"_"+country+"_"+saleChannel;
+
+        try
+        {
+            Class.forName(connectionData.getCLASS_FOR_NAME());
+            Connection connection = DriverManager.getConnection(connectionData.getCONNECTION_PATH());
+
+            preparedStatement = connection.prepareStatement("UPDATE " + queryTableName +
+                    " SET INVENTORY_ITEM_STATUS = (?) WHERE " +
+                    "CONCATENATED_PRIMARY_KEY = (?) AND SINGLE_ITEM_UUID = (?) AND " +
+                    "INVENTORY_TRANSACTION_LOCKED = (?)");
+
+            preparedStatement.setString(1, String.valueOf(inventoryItemStatus));
+            preparedStatement.setString(2, concatenatedKey);
+            preparedStatement.setString(3, String.valueOf(itemUUID));
+            preparedStatement.setBoolean(4, false);
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        }
+        catch (ClassNotFoundException | SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     public InventoryItem getItemForSale(String productKey, String country, String saleChannel)
     {

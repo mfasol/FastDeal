@@ -4,14 +4,16 @@ import Software.Enums.Countries;
 import Software.Enums.Currencies;
 import Software.Enums.SaleChannels;
 import Software.Enums.SaleLedgerTransactionType;
+import Software.Importable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Michele on 26/11/2015.
  */
-public class SalesLedgerLine
+public class SalesLedgerLine extends Importable
 {
     private Map properties = new HashMap();
 
@@ -19,7 +21,8 @@ public class SalesLedgerLine
                            String transactionPostCode, Countries shipToCountry, int quantity,
                            double transactionPrice, double transactionAssociatedCos, SaleChannels transactionChannel,
                            Countries countryTransactionChannel, Currencies currency, int transactionGroupId,
-                           int transactionLineId, SaleLedgerTransactionType transactionLineStatus, String itemId)
+                           int transactionLineId, SaleLedgerTransactionType transactionLineStatus, String itemId,
+                           UUID itemUUID)
     {
         properties.put("date", date);
         properties.put("channelSaleId", channelId);
@@ -38,6 +41,7 @@ public class SalesLedgerLine
         properties.put("transactionLineUUID", java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())));
         properties.put("transactionLineStatus", transactionLineStatus);
         properties.put("itemId", itemId);
+        properties.put("itemUUID", itemUUID);
     }
 
     public Map getProperties()

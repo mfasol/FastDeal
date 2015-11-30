@@ -1,12 +1,12 @@
 package Software.SalesLedger;
 
-import Software.Enums.Countries;
-import Software.Enums.Currencies;
-import Software.Enums.SaleChannels;
-import Software.Enums.SaleLedgerTransactionType;
+import Software.Enums.*;
 import Software.Importer;
 import Software.Inventory.DbManagerInventoryItems;
+import Software.Inventory.InventoryItem;
 import org.apache.commons.csv.CSVRecord;
+
+import java.util.UUID;
 
 /**
  * Created by Michele on 26/11/2015.
@@ -15,11 +15,13 @@ public class SalesLineImport extends Importer
 {
     String referenceChecker = "";
 
-    int transactionGroupId = new DbManagerSalesLedger().internalTransactionNumberGenerator();
+    DbManagerSalesLedger dbManagerSalesLedger = new DbManagerSalesLedger();
+
+    int transactionGroupId = dbManagerSalesLedger.internalTransactionNumberGenerator();
     int transactionLineId = 1;
 
     SalesLedgerLine salesLedgerLine;
-    DbManagerInventoryItems dbManagerInventoryItems;
+    DbManagerInventoryItems dbManagerInventoryItems = new DbManagerInventoryItems();
 
     private final int TRANSACTION_DATE = 0;
     private final int EXTERNAL_ORDER_ID = 1;
@@ -45,7 +47,7 @@ public class SalesLineImport extends Importer
 
             if(currentReference.equals(referenceChecker))
             {
-                transactionGroupId = new DbManagerSalesLedger().internalTransactionNumberGenerator();
+                transactionGroupId = dbManagerSalesLedger.internalTransactionNumberGenerator();
                 transactionLineId  = 1;
             }
             else
@@ -65,14 +67,23 @@ public class SalesLineImport extends Importer
         String productKey =  csvRecord.get(PRODUCT_KEY);
         String country = csvRecord.get(TRANSACTION_CHANNEL_COUNTRY);
         String channel = csvRecord.get(TRANSACTION_CHANNEL);
-        String itemId = dbManagerInventoryItems.getItemForSale(productKey,country,channel).getPrimaryKey();
+        InventoryItem tempItem = dbManagerInventoryItems.getItemForSale(productKey,country,channel);
+        String itemId = tempItem.getPrimaryKey();
+        UUID itemUUID = tempItem.getItemUuid();
+        Double additionalCos = Double.parseDouble(csvRecord.get(TRANSACTION_ASSOCIATED_COS));
 
         salesLedgerLine = new SalesLedgerLine(csvRecord.get(TRANSACTION_DATE),csvRecord.get(EXTERNAL_ORDER_ID),
                 productKey,csvRecord.get(TRANSACTION_CITY),csvRecord.get(TRANSACTION_POSTCODE),
                 Countries.valueOf(csvRecord.get(TRANSACTION_COUNTRY)),
                 Integer.parseInt(csvRecord.get(PRODUCT_QUANTITY)),Double.parseDouble(csvRecord.get(TRANSACTION_PRICE)),
-                Double.parseDouble(csvRecord.get(TRANSACTION_ASSOCIATED_COS)), SaleChannels.valueOf(channel),
+                additionalCos, SaleChannels.valueOf(channel),
                 Countries.valueOf(country), Currencies.valueOf(csvRecord.get(CURRENCY)), transactionGroupId,
-                transactionLineId,SaleLedgerTransactionType.SALE, itemId);
+                transactionLineId,SaleLedgerTransactionType.SALE, itemId, itemUUID);
+
+        //dbManagerInventoryItems.updateInventoryItemCos(itemId, itemUUID, additionalCos,country,channel);
+
+        //dbManagerInventoryItems.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD,country,channel);
+
+        dbManagerSalesLedger.persistTarget(salesLedgerLine);
     }
 }
