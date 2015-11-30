@@ -1,6 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
 /FastDeal.trace.db
-/FastDeal.h2.db
+/DeleteFastDeal.h2.db
 /2015-11-22-Backup-FastDeal.h2.db
 /FastDeal.lock.db
 /2015-11-29-Backup-FastDeal.h2.db
+/FastDeal.h2.db
+/2015-11-30-Backup-FastDeal.h2.db

@@ -45,16 +45,11 @@ public class SalesLineImport extends Importer
 
             String currentReference = csvRecord.get(EXTERNAL_ORDER_ID);
 
-            if(currentReference.equals(referenceChecker))
+            if(!currentReference.equals(referenceChecker))
             {
                 transactionGroupId = dbManagerSalesLedger.internalTransactionNumberGenerator();
                 transactionLineId  = 1;
             }
-            else
-            {
-                transactionLineId++;
-            }
-
             importTransactionLines(csvRecord);
 
             referenceChecker = currentReference;
@@ -64,26 +59,34 @@ public class SalesLineImport extends Importer
 
     private void importTransactionLines(CSVRecord csvRecord)
     {
-        String productKey =  csvRecord.get(PRODUCT_KEY);
-        String country = csvRecord.get(TRANSACTION_CHANNEL_COUNTRY);
-        String channel = csvRecord.get(TRANSACTION_CHANNEL);
-        InventoryItem tempItem = dbManagerInventoryItems.getItemForSale(productKey,country,channel);
-        String itemId = tempItem.getPrimaryKey();
-        UUID itemUUID = tempItem.getItemUuid();
-        Double additionalCos = Double.parseDouble(csvRecord.get(TRANSACTION_ASSOCIATED_COS));
+        // price and additional cos manipulation for sales involving multiple items of same product;
+        int productQuantity = Integer.parseInt(csvRecord.get(PRODUCT_QUANTITY));
+        Double itemPrice = Double.parseDouble(csvRecord.get(TRANSACTION_PRICE)) / productQuantity;
+        Double itemAdditionalCos = Double.parseDouble(csvRecord.get(TRANSACTION_ASSOCIATED_COS)) / productQuantity;
 
-        salesLedgerLine = new SalesLedgerLine(csvRecord.get(TRANSACTION_DATE),csvRecord.get(EXTERNAL_ORDER_ID),
-                productKey,csvRecord.get(TRANSACTION_CITY),csvRecord.get(TRANSACTION_POSTCODE),
-                Countries.valueOf(csvRecord.get(TRANSACTION_COUNTRY)),
-                Integer.parseInt(csvRecord.get(PRODUCT_QUANTITY)),Double.parseDouble(csvRecord.get(TRANSACTION_PRICE)),
-                additionalCos, SaleChannels.valueOf(channel),
-                Countries.valueOf(country), Currencies.valueOf(csvRecord.get(CURRENCY)), transactionGroupId,
-                transactionLineId,SaleLedgerTransactionType.SALE, itemId, itemUUID);
+        for (int i = 1; i <= productQuantity ; i++)
+        {
+            String productKey =  csvRecord.get(PRODUCT_KEY);
+            String country = csvRecord.get(TRANSACTION_CHANNEL_COUNTRY);
+            String channel = csvRecord.get(TRANSACTION_CHANNEL);
+            InventoryItem tempItem = dbManagerInventoryItems.getItemForSale(productKey,country,channel);
+            String itemId = tempItem.getPrimaryKey();
+            UUID itemUUID = tempItem.getItemUuid();
 
-        //dbManagerInventoryItems.updateInventoryItemCos(itemId, itemUUID, additionalCos,country,channel);
+            salesLedgerLine = new SalesLedgerLine(csvRecord.get(TRANSACTION_DATE),csvRecord.get(EXTERNAL_ORDER_ID),
+                    productKey,csvRecord.get(TRANSACTION_CITY),csvRecord.get(TRANSACTION_POSTCODE),
+                    Countries.valueOf(csvRecord.get(TRANSACTION_COUNTRY)),
+                    1,itemPrice, itemAdditionalCos,
+                    SaleChannels.valueOf(channel), Countries.valueOf(country), Currencies.valueOf(csvRecord.get(CURRENCY)),
+                    transactionGroupId, transactionLineId,SaleLedgerTransactionType.SALE, itemId, itemUUID);
 
-        //dbManagerInventoryItems.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD,country,channel);
+            dbManagerInventoryItems.updateInventoryItemCos(itemId, itemUUID, itemAdditionalCos, country, channel);
 
-        dbManagerSalesLedger.persistTarget(salesLedgerLine);
+            dbManagerInventoryItems.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD, country, channel);
+
+            dbManagerSalesLedger.persistTarget(salesLedgerLine);
+
+            transactionLineId++;
+        }
     }
 }
