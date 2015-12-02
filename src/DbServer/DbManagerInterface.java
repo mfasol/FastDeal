@@ -2,9 +2,7 @@ package DbServer;
 
 
 
-import Software.Importable;
-
-import java.sql.Connection;
+import Software.Utilities.Importable;
 
 /**
  * Created by Michele on 17/10/2015.

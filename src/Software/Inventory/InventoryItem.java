@@ -4,9 +4,8 @@ package Software.Inventory;
 import Software.Enums.Countries;
 import Software.Enums.Currencies;
 import Software.Enums.InventoryItemStatus;
-import Software.Importable;
+import Software.Utilities.Importable;
 
-import java.rmi.server.UID;
 import java.util.UUID;
 import Software.Enums.SaleChannels;
 

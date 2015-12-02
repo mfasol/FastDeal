@@ -4,7 +4,7 @@ import Software.Enums.Countries;
 import Software.Enums.Currencies;
 import Software.Enums.SaleChannels;
 import Software.Enums.SaleLedgerTransactionType;
-import Software.Importable;
+import Software.Utilities.Importable;
 
 import java.util.HashMap;
 import java.util.Map;

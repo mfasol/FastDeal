@@ -2,8 +2,8 @@ package Software.SalesLedger;
 
 import DbServer.ConnectionData;
 import DbServer.DbManagerInterface;
-import Software.DateConverter;
-import Software.Importable;
+import Software.Utilities.DateConverter;
+import Software.Utilities.Importable;
 
 import java.sql.*;
 import java.time.Instant;

@@ -2,7 +2,7 @@ package Software.Products;
 
 import DbServer.ConnectionData;
 import DbServer.DbManagerInterface;
-import Software.Importable;
+import Software.Utilities.Importable;
 import com.eaio.uuid.UUID;
 
 import java.sql.*;

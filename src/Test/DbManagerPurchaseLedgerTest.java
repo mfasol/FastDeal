@@ -4,7 +4,7 @@ import Software.Enums.Countries;
 import Software.Enums.Currencies;
 import Software.Enums.PurchaseLedgerTransactionType;
 import Software.Enums.SaleChannels;
-import Software.Importable;
+import Software.Utilities.Importable;
 import Software.PurchaseLedger.DbManagerPurchaseLedger;
 import Software.PurchaseLedger.PurchaseLedgerTransactionLine;
 import com.eaio.uuid.UUID;

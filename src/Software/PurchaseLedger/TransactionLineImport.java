@@ -2,7 +2,7 @@ package Software.PurchaseLedger;
 
 import DbServer.DbManagerInterface;
 import Software.Enums.*;
-import Software.Importer;
+import Software.Utilities.Importer;
 import Software.Inventory.DbManagerInventoryItems;
 import Software.Inventory.InventoryItem;
 import com.eaio.uuid.UUID;

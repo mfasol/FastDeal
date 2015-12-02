@@ -1,6 +1,6 @@
 package Software.Products;
 
-import Software.Importable;
+import Software.Utilities.Importable;
 
 /**
  * Created by Michele on 16/10/2015.

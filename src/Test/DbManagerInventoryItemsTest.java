@@ -3,7 +3,7 @@ package Test;
 import Software.Enums.Countries;
 import Software.Enums.InventoryItemStatus;
 import Software.Enums.SaleChannels;
-import Software.Importable;
+import Software.Utilities.Importable;
 import Software.Inventory.DbManagerInventoryItems;
 import Software.Inventory.InventoryItem;
 import org.junit.After;

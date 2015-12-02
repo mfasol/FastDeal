@@ -1,4 +1,4 @@
-package Software;
+package Software.Utilities;
 
 import DbServer.DbManagerInterface;
 import Software.Inventory.DbManagerInventoryItems;

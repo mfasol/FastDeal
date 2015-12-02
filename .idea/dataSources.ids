@@ -94,11 +94,16 @@
       <column name="ITEM_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="false" jdbcType="-2"/>
       <primary-key name="CONSTRAINT_9" columns="TRANSACTION_LINE_UUID"/>
     </table>
+    <table name="V_INVENTORY_FOR_SALE_BY_PRODUCT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="COUNT(CONCATENATED_PRIMARY_KEY)" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+    </table>
     <table name="V_SALES_CONTRIBUTION" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="ITEM_ID" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
-      <column name="ITEM_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="true" jdbcType="-2"/>
       <column name="SALES" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="MER_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="CONT_AFT_MERCH" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="PROFIT" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
     </table>
@@ -106,6 +111,8 @@
       <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="SALES_NUM" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
       <column name="TOT_SALES" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_MER_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_CONT_AFT_MERCH" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="TOT_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="TOT_GP" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="AVG_SALE" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>

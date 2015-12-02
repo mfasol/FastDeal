@@ -1,7 +1,7 @@
 package Software.SalesLedger;
 
 import Software.Enums.*;
-import Software.Importer;
+import Software.Utilities.Importer;
 import Software.Inventory.DbManagerInventoryItems;
 import Software.Inventory.InventoryItem;
 import org.apache.commons.csv.CSVRecord;

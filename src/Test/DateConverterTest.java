@@ -1,9 +1,7 @@
 package Test;
 
-import Software.DateConverter;
+import Software.Utilities.DateConverter;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Michele on 29/11/2015.

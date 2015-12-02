@@ -1,6 +1,6 @@
 package Software.Products;
 
-import Software.Importer;
+import Software.Utilities.Importer;
 import DbServer.DbManagerInterface;
 import org.apache.commons.csv.CSVRecord;
 import java.io.*;

@@ -5,7 +5,7 @@ import DbServer.DbManagerInterface;
 import Software.Enums.Countries;
 import Software.Enums.InventoryItemStatus;
 import Software.Enums.SaleChannels;
-import Software.Importable;
+import Software.Utilities.Importable;
 
 
 import java.math.BigDecimal;

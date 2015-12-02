@@ -1,4 +1,4 @@
-package Software;
+package Software.Utilities;
 
 import Software.Products.ProductImport;
 import Software.Products.DbManagerProducts;
