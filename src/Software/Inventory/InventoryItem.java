@@ -39,7 +39,6 @@ public class InventoryItem extends Importable
         this.internalInvoiceReference = internalInvoiceReference;
         this.internalInvoiceReferenceLine = internalInvoiceReferenceLine;
         this.itemNumber = itemNumber;
-        this.primaryKey = internalInvoiceReference+"-"+internalInvoiceReferenceLine+"-"+itemNumber;
         this.invoiceUuid = invoiceUuid;
         this.invoiceLineUuid = invoiceLineUuid;
         this.itemUuid = itemUuid;
@@ -50,6 +49,7 @@ public class InventoryItem extends Importable
         this.itemDate = itemDate;
         returnCounter = 0;
         inventoryItemTransactionTypes = InventoryItemTransactionTypes.PURCHASE;
+        this.primaryKey = internalInvoiceReference+"-"+internalInvoiceReferenceLine+"-"+itemNumber+"-"+returnCounter;
     }
 
     public int getInternalInvoiceReference()
