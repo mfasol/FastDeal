@@ -4,6 +4,7 @@ import DbServer.ConnectionData;
 import DbServer.DbManagerInterface;
 import Software.Enums.Countries;
 import Software.Enums.InventoryItemStatus;
+import Software.Enums.InventoryItemTransactionTypes;
 import Software.Enums.SaleChannels;
 import Software.Utilities.Importable;
 
@@ -56,8 +57,8 @@ public class DbManagerInventoryItems implements DbManagerInterface
                     "INTERNAL_INVOICE_REFERENCE_KEY, INTERNAL_INVOICE_REFERENCE_LINE, ITEM_NUMBER, " +
                     "CONCATENATED_PRIMARY_KEY, INVOICE_UUID, INVOICE_LINE_UUID, PRODUCT_KEY,ROUND (ITEM_COS, 12)," +
                     "SINGLE_ITEM_UUID, ITEM_DATE, INVENTORY_ITEM_STATUS, INVENTORY_ITEM_CURRENCY," +
-                    "INVENTORY_ITEM_STORE_TIMESTAMP)" +
-                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    "INVENTORY_ITEM_STORE_TIMESTAMP, RETURN_COUNTER, TRANSACTION_TYPE )" +
+                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             // needed for converting a string in java date
             DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -82,6 +83,8 @@ public class DbManagerInventoryItems implements DbManagerInterface
             preparedStatement.setString(11, String.valueOf(inventoryItem.getInventoryItemStatus()));
             preparedStatement.setString(12, String.valueOf(inventoryItem.getCurrency()));
             preparedStatement.setTimestamp(13, java.sql.Timestamp.from(Instant.now()));
+            preparedStatement.setInt(14, inventoryItem.getReturnCounter());
+            preparedStatement.setString(15, String.valueOf(inventoryItem.getInventoryItemTransactionTypes()));
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -270,6 +273,9 @@ public class DbManagerInventoryItems implements DbManagerInterface
                     SaleChannels.valueOf(dbManagerPurchaseLedger.retrieveTransactionLineToChannel(invoiceNum,
                             invoiceLineNum)),
                     resultSet.getString("ITEM_DATE"));
+            inventoryItem.setReturnCounter(resultSet.getInt("RETURN_COUNTER"));
+            inventoryItem.setInventoryItemTransactionTypes(
+                    InventoryItemTransactionTypes.valueOf(resultSet.getString("TRANSACTION_TYPE")));
         }
         catch (SQLException e)
         {
