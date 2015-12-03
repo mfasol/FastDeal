@@ -21,11 +21,13 @@
       <column name="INVENTORY_ITEM_CURRENCY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="INVENTORY_ITEM_STORE_TIMESTAMP" sqlType="TIMESTAMP" precision="23" scale="10" nullable="false" jdbcType="93"/>
       <column name="INVENTORY_TRANSACTION_LOCKED" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16" def="RkFMU0U="/>
-      <primary-key name="CONSTRAINT_3" columns="INTERNAL_INVOICE_REFERENCE_KEY,INTERNAL_INVOICE_REFERENCE_LINE,ITEM_NUMBER"/>
+      <column name="RETURN_COUNTER" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4" def="MA=="/>
+      <column name="TRANSACTION_TYPE" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" def="J1BVUkNIQVNFJw=="/>
+      <primary-key name="CONSTRAINT_E" columns="INTERNAL_INVOICE_REFERENCE_KEY,INTERNAL_INVOICE_REFERENCE_LINE,ITEM_NUMBER,RETURN_COUNTER"/>
       <foreign-key name="INVENTORY_ITEMS_UK_AMAZON___FK" columns="PRODUCT_KEY" ref-table="PRODUCT" ref-schema="PUBLIC" ref-catalog="FASTDEAL" ref-columns="SELLER_SKU" update-rule="1" delete-rule="1" deferrability="2"/>
       <index name="INVENTORY_ITEMS_CONCATENATED_PRIMARY_KEY_UINDEX" unique="true" columns="CONCATENATED_PRIMARY_KEY"/>
       <index name="INVENTORY_ITEMS_SINGLE_ITEM_UUID_UINDEX" unique="true" columns="SINGLE_ITEM_UUID"/>
-      <index name="INVENTORY_ITEMS_UK_AMAZON___FK_INDEX_D" unique="false" columns="PRODUCT_KEY"/>
+      <index name="INVENTORY_ITEMS_UK_AMAZON___FK_INDEX_7" unique="false" columns="PRODUCT_KEY"/>
     </table>
     <table name="PRODUCT" schema="PUBLIC" catalog="FASTDEAL" type="TABLE">
       <column name="ASIN" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
@@ -39,7 +41,6 @@
       <column name="STORE_TIMESTAMP" sqlType="TIMESTAMP" precision="23" scale="10" nullable="true" jdbcType="93"/>
       <column name="STORE_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="true" jdbcType="-2"/>
       <primary-key name="PRODUCT_PRODUCT_KEY_PK" columns="PRODUCT_KEY"/>
-      <exported-key name="INVENTORY_ITEMS_UK_AMAZON___FK" table="INVENTORY_ITEMS_GB_AMAZON" schema="PUBLIC" catalog="FASTDEAL" columns="PRODUCT_KEY"/>
       <exported-key name="INVENTORY_ITEMS_UK_AMAZON___FK" table="INVENTORY_ITEMS_GB_AMAZON" schema="PUBLIC" catalog="FASTDEAL" columns="PRODUCT_KEY"/>
       <index name="PRODUCT_ASIN_UINDEX" unique="true" columns="ASIN"/>
       <index name="PRODUCT_SELLER_SKU_UINDEX" unique="true" columns="SELLER_SKU"/>
@@ -94,11 +95,16 @@
       <column name="ITEM_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="false" jdbcType="-2"/>
       <primary-key name="CONSTRAINT_9" columns="TRANSACTION_LINE_UUID"/>
     </table>
+    <table name="V_INVENTORY_FOR_SALE_BY_PRODUCT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="COUNT(CONCATENATED_PRIMARY_KEY)" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+    </table>
     <table name="V_SALES_CONTRIBUTION" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="ITEM_ID" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
-      <column name="ITEM_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="true" jdbcType="-2"/>
       <column name="SALES" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="MER_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="CONT_AFT_MERCH" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="PROFIT" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
     </table>
@@ -106,6 +112,8 @@
       <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="SALES_NUM" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
       <column name="TOT_SALES" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_MER_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_CONT_AFT_MERCH" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="TOT_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="TOT_GP" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="AVG_SALE" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>

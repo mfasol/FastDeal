@@ -1,14 +1,11 @@
 package Software.Inventory;
 
 
-import Software.Enums.Countries;
-import Software.Enums.Currencies;
-import Software.Enums.InventoryItemStatus;
+import Software.Enums.*;
 import Software.Importable;
 
 import java.rmi.server.UID;
 import java.util.UUID;
-import Software.Enums.SaleChannels;
 
 
 /**
@@ -32,6 +29,8 @@ public class InventoryItem extends Importable
     private String itemDate;
     private InventoryItemStatus inventoryItemStatus;
     private Currencies currency;
+    private int returnCounter;
+    private InventoryItemTransactionTypes inventoryItemTransactionTypes;
 
     public InventoryItem(int internalInvoiceReference, int internalInvoiceReferenceLine, int itemNumber,
                          UUID invoiceUuid, UUID invoiceLineUuid, UUID itemUuid, String sellerSku,
@@ -40,7 +39,6 @@ public class InventoryItem extends Importable
         this.internalInvoiceReference = internalInvoiceReference;
         this.internalInvoiceReferenceLine = internalInvoiceReferenceLine;
         this.itemNumber = itemNumber;
-        this.primaryKey = internalInvoiceReference+"-"+internalInvoiceReferenceLine+"-"+itemNumber;
         this.invoiceUuid = invoiceUuid;
         this.invoiceLineUuid = invoiceLineUuid;
         this.itemUuid = itemUuid;
@@ -49,6 +47,9 @@ public class InventoryItem extends Importable
         this.country = country;
         this.saleChannel = saleChannel;
         this.itemDate = itemDate;
+        returnCounter = 0;
+        inventoryItemTransactionTypes = InventoryItemTransactionTypes.PURCHASE;
+        this.primaryKey = internalInvoiceReference+"-"+internalInvoiceReferenceLine+"-"+itemNumber+"-"+returnCounter;
     }
 
     public int getInternalInvoiceReference()
@@ -189,6 +190,26 @@ public class InventoryItem extends Importable
     public void setCurrency(Currencies currency)
     {
         this.currency = currency;
+    }
+
+    public int getReturnCounter()
+    {
+        return returnCounter;
+    }
+
+    public void setReturnCounter(int returnCounter)
+    {
+        this.returnCounter = returnCounter;
+    }
+
+    public InventoryItemTransactionTypes getInventoryItemTransactionTypes()
+    {
+        return inventoryItemTransactionTypes;
+    }
+
+    public void setInventoryItemTransactionTypes(InventoryItemTransactionTypes inventoryItemTransactionTypes)
+    {
+        this.inventoryItemTransactionTypes = inventoryItemTransactionTypes;
     }
 
     @Override
