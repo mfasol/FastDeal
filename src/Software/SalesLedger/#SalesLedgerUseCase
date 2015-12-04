@@ -23,7 +23,6 @@ Reverse Sales Use case - Requirement 2
 3 - A new refund entry in the sale ledger is created.
 4 - Revenue is the refunded amount (with minus sign).
     4.1 (OPTIONAL) - If part of the merchant commissions are refunded, it will reduce the COS of the refund line.
-5 - The item is cloned in the inventory, with its return counter increased by one
-6 - Both, refund and cloned inventory item are persisted.
+5 - Both, refund and cloned inventory item are persisted.
 
 
