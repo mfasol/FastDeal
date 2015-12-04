@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
-  <data-source name="H2 - FastDeal" uuid="58a6cb21-1bc9-4393-af6a-359f59d1db98">
+  <data-source name="FastDeal.h2" uuid="d995cfe0-e5d9-4b45-bbe5-bd710e15b1d8">
     <database-info product="H2" version="1.3.176 (2014-04-05)" jdbc-version="4.0" driver-name="H2 JDBC Driver" driver-version="1.3.176 (2014-04-05)">
       <identifier-quote-string>&quot;</identifier-quote-string>
     </database-info>

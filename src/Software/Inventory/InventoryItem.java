@@ -2,7 +2,7 @@ package Software.Inventory;
 
 
 import Software.Enums.*;
-import Software.Importable;
+import Software.Utilities.Importable;
 
 import java.rmi.server.UID;
 import java.util.UUID;

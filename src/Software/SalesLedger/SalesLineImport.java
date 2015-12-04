@@ -35,6 +35,7 @@ public class SalesLineImport extends Importer
     private final int TRANSACTION_CHANNEL = 9;
     private final int TRANSACTION_CHANNEL_COUNTRY = 10;
     private final int CURRENCY = 11;
+    private final int TRANSACTION_TYPE = 12;
 
     @Override
     protected void completeImportProcess()
@@ -50,14 +51,21 @@ public class SalesLineImport extends Importer
                 transactionGroupId = dbManagerSalesLedger.internalTransactionNumberGenerator();
                 transactionLineId  = 1;
             }
-            importTransactionLines(csvRecord);
+            if(csvRecord.get(TRANSACTION_TYPE).equals("Order Payment"))
+            {
+                importSale(csvRecord);
+            }
+            else if(csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
+            {
+                importRefunds(csvRecord);
+            }
 
             referenceChecker = currentReference;
         }
 
     }
 
-    private void importTransactionLines(CSVRecord csvRecord)
+    private void importSale(CSVRecord csvRecord)
     {
         // price and additional cos manipulation for sales involving multiple items of same product;
         int productQuantity = Integer.parseInt(csvRecord.get(PRODUCT_QUANTITY));
@@ -88,5 +96,10 @@ public class SalesLineImport extends Importer
 
             transactionLineId++;
         }
+    }
+
+    private void importRefunds(CSVRecord csvRecord)
+    {
+
     }
 }
