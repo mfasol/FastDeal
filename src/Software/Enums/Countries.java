@@ -5,12 +5,16 @@ package Software.Enums;
  */
 public enum  Countries
 {
-    GB,
-    SP,
-    IT,
-    GR,
+    BG,
+    DK,
+    FI,
     FR,
+    GB,
+    GR,
     IE,
+    IT,
+    MT,
+    SP,
     BLANK;
 
     public static boolean contains(String country)
