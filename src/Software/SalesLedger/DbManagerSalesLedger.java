@@ -60,9 +60,9 @@ public class DbManagerSalesLedger implements DbManagerInterface
             preparedStatement.setDouble(8,Double.parseDouble(String.valueOf(
                     salesLedgerLine.getProperty("transactionPrice"))));
             preparedStatement.setDouble(9,Double.parseDouble(String.valueOf(
-                    salesLedgerLine.getProperty("transactionAssociatedCos"))));
-            preparedStatement.setString(10,String.valueOf(salesLedgerLine.getProperty("transactionChannel")));
-            preparedStatement.setString(11,String.valueOf(salesLedgerLine.getProperty("countryTransactionChannel")));
+                    salesLedgerLine.getProperty("logisticAssociatedCos"))));
+            preparedStatement.setString(10,String.valueOf(salesLedgerLine.getProperty("logisticChannel")));
+            preparedStatement.setString(11,String.valueOf(salesLedgerLine.getProperty("countryLogisticChannel")));
             preparedStatement.setString(12,String.valueOf(salesLedgerLine.getProperty("currency")));
             preparedStatement.setInt(13,
                     Integer.parseInt(String.valueOf(salesLedgerLine.getProperty("transactionGroupId"))));

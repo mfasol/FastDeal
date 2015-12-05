@@ -58,11 +58,13 @@ public class SalesLineImport extends Importer
             }
 
             referenceChecker = currentReference;
+
+            importSalesLedgerTransaction(csvRecord);
         }
 
     }
 
-    private void importSale(CSVRecord csvRecord)
+    private void importSalesLedgerTransaction(CSVRecord csvRecord)
     {
         // price and additional cos manipulation for sales involving multiple items of same product;
         int productQuantity = Integer.parseInt(csvRecord.get(PRODUCT_QUANTITY));
@@ -101,6 +103,7 @@ public class SalesLineImport extends Importer
                         String.valueOf(tempSalesLedgerLine.getProperty("transactionLineUUID")));
 
                 salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.REFUND);
+                salesLedgerLine.setProperty("itemUUID", tempSalesLedgerLine.getProperty("itemUUID"));
             }
 
             dbManagerSalesLedger.persistTarget(salesLedgerLine);
