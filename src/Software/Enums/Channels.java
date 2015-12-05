@@ -3,7 +3,7 @@ package Software.Enums;
 /**
  * Created by Michele on 08/11/2015.
  */
-public enum SaleChannels
+public enum Channels
 {
     AMAZON,
     EBAY,
@@ -14,7 +14,7 @@ public enum SaleChannels
 
     public static boolean contains(String channel)
     {
-        for(SaleChannels aChannel : SaleChannels.values())
+        for(Channels aChannel : Channels.values())
         {
             if(aChannel.name().equalsIgnoreCase(channel)) {return true;}
         }

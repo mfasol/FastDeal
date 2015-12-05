@@ -96,7 +96,7 @@ public class TransactionLineImport extends Importer
         int transactionLineKey;
         Countries countryFrom;
         Countries countryTo;
-        SaleChannels saleChannel;
+        Channels saleChannel;
         String productKey = "";
         try
         {
@@ -108,7 +108,7 @@ public class TransactionLineImport extends Importer
             countryTo= Countries.valueOf(
                     new DbManagerPurchaseLedger().retrieveTransactionLineToCountry(
                             transactionGroupKey, transactionLineKey));
-            saleChannel = SaleChannels.valueOf(
+            saleChannel = Channels.valueOf(
                     new DbManagerPurchaseLedger().retrieveTransactionLineToChannel(
                             transactionGroupKey, transactionLineKey));
             productKey = new DbManagerPurchaseLedger().retrieveProductKey(
@@ -126,7 +126,7 @@ public class TransactionLineImport extends Importer
             countryTo= Countries.valueOf(
                     new DbManagerPurchaseLedger().retrieveTransactionGroupToCountry(
                             transactionGroupKey));
-            saleChannel = SaleChannels.valueOf(
+            saleChannel = Channels.valueOf(
                     new DbManagerPurchaseLedger().retrieveTransactionGroupToChannel(
                             transactionGroupKey));
         }
@@ -180,7 +180,7 @@ public class TransactionLineImport extends Importer
                 Double.valueOf(csvRecord.get(VAT)), csvRecord.get(VAT_CODE),
                 Countries.valueOf(csvRecord.get(SHIPPED_FROM_COUNTRY)),
                 Countries.valueOf(csvRecord.get(SHIPPED_TO_COUNTRY)),
-                SaleChannels.valueOf(csvRecord.get(SHIPPED_TO_CHANNEL)),
+                Channels.valueOf(csvRecord.get(SHIPPED_TO_CHANNEL)),
                 invoiceNumber,lineCounter, invoiceUuid, Currencies.valueOf(csvRecord.get(CURRENCY)),
                 PurchaseLedgerTransactionType.valueOf(csvRecord.get(TRANSACTION_TYPE)));
 

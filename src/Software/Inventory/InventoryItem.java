@@ -4,7 +4,6 @@ package Software.Inventory;
 import Software.Enums.*;
 import Software.Utilities.Importable;
 
-import java.rmi.server.UID;
 import java.util.UUID;
 
 
@@ -25,7 +24,7 @@ public class InventoryItem extends Importable
     private String productKey;
     private double itemCost;
     private Countries country;
-    private SaleChannels saleChannel;
+    private Channels saleChannel;
     private String itemDate;
     private InventoryItemStatus inventoryItemStatus;
     private Currencies currency;
@@ -34,7 +33,7 @@ public class InventoryItem extends Importable
 
     public InventoryItem(int internalInvoiceReference, int internalInvoiceReferenceLine, int itemNumber,
                          UUID invoiceUuid, UUID invoiceLineUuid, UUID itemUuid, String sellerSku,
-                         double itemCost, Countries country, SaleChannels saleChannel, String itemDate)
+                         double itemCost, Countries country, Channels saleChannel, String itemDate)
     {
         this.internalInvoiceReference = internalInvoiceReference;
         this.internalInvoiceReferenceLine = internalInvoiceReferenceLine;
@@ -142,12 +141,12 @@ public class InventoryItem extends Importable
         this.itemCost = itemCost;
     }
 
-    public SaleChannels getSaleChannel()
+    public Channels getSaleChannel()
     {
         return saleChannel;
     }
 
-    public void setSaleChannel(SaleChannels saleChannel)
+    public void setSaleChannel(Channels saleChannel)
     {
         this.saleChannel = saleChannel;
     }

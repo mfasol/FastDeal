@@ -36,6 +36,11 @@ public class SalesLineImport extends Importer
     private final int TRANSACTION_CHANNEL_COUNTRY = 10;
     private final int CURRENCY = 11;
     private final int TRANSACTION_TYPE = 12;
+    private final int MERCHANT_CHANNEL = 13;
+    private final int MERCHANT_CHANNEL_COUNTRY = 14;
+    private final int MERCHANT_CHANNEL_FEES = 15;
+
+
 
     @Override
     protected void completeImportProcess()
@@ -50,14 +55,6 @@ public class SalesLineImport extends Importer
             {
                 transactionGroupId = dbManagerSalesLedger.internalTransactionNumberGenerator();
                 transactionLineId  = 1;
-            }
-            if(csvRecord.get(TRANSACTION_TYPE).equals("Order Payment"))
-            {
-                importSale(csvRecord);
-            }
-            else if(csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
-            {
-                importRefunds(csvRecord);
             }
 
             referenceChecker = currentReference;
@@ -85,21 +82,27 @@ public class SalesLineImport extends Importer
                     productKey,csvRecord.get(TRANSACTION_CITY),csvRecord.get(TRANSACTION_POSTCODE),
                     Countries.valueOf(csvRecord.get(TRANSACTION_COUNTRY)),
                     1,itemPrice, itemAdditionalCos,
-                    SaleChannels.valueOf(channel), Countries.valueOf(country), Currencies.valueOf(csvRecord.get(CURRENCY)),
-                    transactionGroupId, transactionLineId,SaleLedgerTransactionType.SALE, itemId, itemUUID);
+                    Channels.valueOf(channel), Countries.valueOf(country), Currencies.valueOf(csvRecord.get(CURRENCY)),
+                    transactionGroupId, transactionLineId,SaleLedgerTransactionType.SALE, itemId, itemUUID,
+                    Channels.valueOf(csvRecord.get(MERCHANT_CHANNEL)),
+                            Countries.valueOf(csvRecord.get(MERCHANT_CHANNEL_COUNTRY)),
+                            Double.parseDouble(csvRecord.get(MERCHANT_CHANNEL_FEES)));
 
-            dbManagerInventoryItems.updateInventoryItemCos(itemId, itemUUID, itemAdditionalCos, country, channel);
+            if(csvRecord.get(TRANSACTION_TYPE).equals("Order Payment"))
+            {
+                salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.SALE);
+                dbManagerInventoryItems.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD, country, channel);
+            }
+            else if(csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
+            {
+                salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.REFUND);
+            }
 
-            dbManagerInventoryItems.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD, country, channel);
+
 
             dbManagerSalesLedger.persistTarget(salesLedgerLine);
 
             transactionLineId++;
         }
-    }
-
-    private void importRefunds(CSVRecord csvRecord)
-    {
-
     }
 }

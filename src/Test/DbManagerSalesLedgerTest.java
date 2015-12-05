@@ -22,4 +22,16 @@ public class DbManagerSalesLedgerTest
     {
         System.out.println(dbManagerSalesLedger.internalTransactionNumberGenerator());
     }
+
+    @Test
+    public void testRetrieveSaleLedgerTransaction() throws Exception
+    {
+        System.out.println(dbManagerSalesLedger.retrieveSaleLedgerTransaction("205-8088969-6662712","Proraso Sapone Tubo Rinfrescante"));
+    }
+
+    @Test
+    public void testUpdateStatus() throws Exception
+    {
+
+    }
 }

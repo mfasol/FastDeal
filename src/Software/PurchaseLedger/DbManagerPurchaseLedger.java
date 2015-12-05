@@ -5,7 +5,7 @@ import DbServer.DbManagerInterface;
 import Software.Enums.Countries;
 import Software.Enums.Currencies;
 import Software.Enums.PurchaseLedgerTransactionType;
-import Software.Enums.SaleChannels;
+import Software.Enums.Channels;
 import Software.Utilities.Importable;
 import Software.Inventory.DbManagerInventoryItems;
 
@@ -571,7 +571,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
                     resultSet.getString(4), resultSet.getString(5), resultSet.getInt(6), resultSet.getDouble(7),
                     resultSet.getDouble(9), resultSet.getString(8),
                     Countries.valueOf(resultSet.getString(10)), Countries.valueOf((resultSet.getString(11))),
-                    SaleChannels.valueOf((resultSet.getString(12))), resultSet.getInt(15),
+                    Channels.valueOf((resultSet.getString(12))), resultSet.getInt(15),
                     resultSet.getInt(16), null,
                     Currencies.valueOf(resultSet.getString(18)),
                 PurchaseLedgerTransactionType.valueOf(resultSet.getString(20)));

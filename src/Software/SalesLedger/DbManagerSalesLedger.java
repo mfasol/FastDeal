@@ -2,11 +2,16 @@ package Software.SalesLedger;
 
 import DbServer.ConnectionData;
 import DbServer.DbManagerInterface;
+import Software.Enums.Channels;
+import Software.Enums.Countries;
+import Software.Enums.Currencies;
+import Software.Enums.SaleLedgerTransactionType;
 import Software.Utilities.DateConverter;
 import Software.Utilities.Importable;
 
 import java.sql.*;
 import java.time.Instant;
+import java.util.UUID;
 
 /**
  * Created by Michele on 26/11/2015.
@@ -37,10 +42,11 @@ public class DbManagerSalesLedger implements DbManagerInterface
 
             preparedStatement = connection.prepareStatement("INSERT INTO " + TABLE_NAME + "(TRANSACTION_DATE, " +
                     "EXTERNAL_TRANSACTION_ID, PRODUCT_KEY, SHIP_CITY, SHIP_POSTCODE, SHIP_COUNTRY, QUANTITY, " +
-                    "TRANSACTION_PRICE, TRANSACTION_ADDITIONAL_COS, TRANSACTION_CHANNEL, TRANSACTION_CHANNEL_COUNTRY," +
+                    "TRANSACTION_PRICE, LOGISTIC_ADDITIONAL_COS, LOGISTIC_CHANNEL, LOGISTIC_CHANNEL_COUNTRY," +
                     "CURRENCY, TRANSACTION_ID, TRANSACTION_LINE_ID, TRANSACTION_LINE_UUID, TRANSACTION_STATUS," +
                     " ITEM_ID, TRANSACTION_TIMESTAMP, " +
-                    "TRANSACTION_LOCK, ITEM_UUID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                    "TRANSACTION_LOCK, ITEM_UUID, MERCHANT_CHANNEL, MERCHANT_CHANNEL_COUNTRY, MERCHANT_CHANNEL_FEES)" +
+                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
             preparedStatement.setDate(1, DateConverter.convert(String.valueOf(salesLedgerLine.getProperty("date"))));
             preparedStatement.setString(2, String.valueOf(salesLedgerLine.getProperty("channelSaleId")));
@@ -66,6 +72,12 @@ public class DbManagerSalesLedger implements DbManagerInterface
             preparedStatement.setTimestamp(18, java.sql.Timestamp.from(Instant.now()));
             preparedStatement.setBoolean(19, false);
             preparedStatement.setString(20,String.valueOf(salesLedgerLine.getProperty("itemUUID")));
+            preparedStatement.setString(21,String.valueOf(salesLedgerLine.getProperty("merchantChannel")));
+            preparedStatement.setString(22,String.valueOf(salesLedgerLine.getProperty("merchantChannelCountry")));
+            preparedStatement.setDouble(23,Double.parseDouble(String.valueOf(
+                    salesLedgerLine.getProperty("merchantChannelCos"))));
+
+
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -75,7 +87,72 @@ public class DbManagerSalesLedger implements DbManagerInterface
         {
             e.printStackTrace();
         }
-    }    //TODO
+    }
+
+    public SalesLedgerLine retrieveSaleLedgerTransaction(String externalId, String productId)
+    {
+
+        try
+        {
+            Class.forName(connectionData.getCLASS_FOR_NAME());
+            Connection connection = DriverManager.getConnection(connectionData.getCONNECTION_PATH());
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM SALES_LEDGER WHERE " +
+                    "EXTERNAL_TRANSACTION_ID = (?) AND PRODUCT_KEY = (?)");
+
+            preparedStatement.setString(1, externalId);
+            preparedStatement.setString(2, productId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next())
+            {
+                System.out.println(resultSet.toString());
+                salesLedgerLine = toSalesLedgerLine(resultSet);
+                System.out.println(salesLedgerLine.getProperties());
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+
+        }
+        catch (ClassNotFoundException | SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return salesLedgerLine;
+    }
+
+    private SalesLedgerLine toSalesLedgerLine(ResultSet resultSet)
+    {
+        try
+        {
+            salesLedgerLine = new SalesLedgerLine(resultSet.getString(1),
+                    resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),
+                    resultSet.getString(5), Countries.valueOf(resultSet.getString(6)), resultSet.getInt(7),
+                    resultSet.getDouble(8), resultSet.getDouble(9), Channels.valueOf(resultSet.getString(10)),
+                    Countries.valueOf(resultSet.getString(11)), Currencies.valueOf(resultSet.getString(12)),
+                    resultSet.getInt(13),resultSet.getInt(14),
+                    SaleLedgerTransactionType.valueOf(resultSet.getString(16)), resultSet.getString(17),
+                    java.util.UUID.fromString(String.valueOf(resultSet.getString(20))),
+                    Channels.valueOf(resultSet.getString(21)), Countries.valueOf(resultSet.getString(24)),
+                    resultSet.getDouble(22));
+
+            salesLedgerLine.setProperty("transactionLineUUID", java.util.UUID.fromString(String.valueOf(
+                    resultSet.getString(15))));
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return salesLedgerLine;
+
+    }
+
+    public void updateStatus(String externalId, String status)
+    {
+
+    }
 
     public int internalTransactionNumberGenerator()
     {
@@ -105,4 +182,6 @@ public class DbManagerSalesLedger implements DbManagerInterface
         }
         return internalTransactionNumber;
     }
+
+
 }

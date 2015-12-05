@@ -5,7 +5,7 @@ import DbServer.DbManagerInterface;
 import Software.Enums.Countries;
 import Software.Enums.InventoryItemStatus;
 import Software.Enums.InventoryItemTransactionTypes;
-import Software.Enums.SaleChannels;
+import Software.Enums.Channels;
 import Software.Utilities.Importable;
 
 
@@ -104,7 +104,7 @@ public class DbManagerInventoryItems implements DbManagerInterface
         Countries country = Countries.valueOf(countryString);
 
         String channelString = dbManagerPurchaseLedger.retrieveTransactionLineToChannel(transactionGroupKey,1);
-        SaleChannels saleChannel = SaleChannels.valueOf(channelString);
+        Channels saleChannel = Channels.valueOf(channelString);
 
         String queryTableName = TABLE_NAME+"_"+country+"_"+saleChannel;
         cosPerUnit = round(cosPerUnit);
@@ -138,7 +138,7 @@ public class DbManagerInventoryItems implements DbManagerInterface
         Countries country = Countries.valueOf(countryString);
 
         String channelString = dbManagerPurchaseLedger.retrieveTransactionLineToChannel(transactionGroupKey,1);
-        SaleChannels saleChannel = SaleChannels.valueOf(channelString);
+        Channels saleChannel = Channels.valueOf(channelString);
         cosPerUnit = round(cosPerUnit);
         queryTableName = TABLE_NAME+"_"+country+"_"+saleChannel;
 
@@ -270,7 +270,7 @@ public class DbManagerInventoryItems implements DbManagerInterface
                     resultSet.getDouble("ITEM_COS"),
                     Countries.valueOf(dbManagerPurchaseLedger.retrieveTransactionLineToCountry(invoiceNum,
                             invoiceLineNum)),
-                    SaleChannels.valueOf(dbManagerPurchaseLedger.retrieveTransactionLineToChannel(invoiceNum,
+                    Channels.valueOf(dbManagerPurchaseLedger.retrieveTransactionLineToChannel(invoiceNum,
                             invoiceLineNum)),
                     resultSet.getString("ITEM_DATE"));
             inventoryItem.setReturnCounter(resultSet.getInt("RETURN_COUNTER"));

@@ -2,7 +2,7 @@ package Test;
 
 import Software.Enums.Countries;
 import Software.Enums.InventoryItemStatus;
-import Software.Enums.SaleChannels;
+import Software.Enums.Channels;
 import Software.Utilities.Importable;
 import Software.Inventory.DbManagerInventoryItems;
 import Software.Inventory.InventoryItem;
@@ -23,7 +23,7 @@ public class DbManagerInventoryItemsTest
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
-            "seller-sku" ,5.00, Countries.GB, SaleChannels.AMAZON, "31/10/2015");
+            "seller-sku" ,5.00, Countries.GB, Channels.AMAZON, "31/10/2015");
 
     DbManagerInventoryItems mockDatabase = mock(DbManagerInventoryItems.class);
     DbManagerInventoryItems dbManagerInventoryItems = new DbManagerInventoryItems();

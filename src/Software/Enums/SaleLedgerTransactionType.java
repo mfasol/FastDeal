@@ -7,6 +7,7 @@ public enum SaleLedgerTransactionType
 {
     SALE,
     REVERSAL,
+    REFUND,
     JOURNAL,
     BLANK
     ;

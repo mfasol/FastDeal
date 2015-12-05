@@ -3,7 +3,7 @@ package Software.PurchaseLedger;
 import Software.Enums.Countries;
 import Software.Enums.Currencies;
 import Software.Enums.PurchaseLedgerTransactionType;
-import Software.Enums.SaleChannels;
+import Software.Enums.Channels;
 import Software.Utilities.Importable;
 
 
@@ -30,7 +30,7 @@ public class PurchaseLedgerTransactionLine extends Importable
     private boolean inventoryRelevant = false;
     private Countries shippedFromCountry = null;
     private Countries shippedToCountry = null;
-    private SaleChannels shippedToChannel = null;
+    private Channels shippedToChannel = null;
     private int internalInvoiceReference = 0;
     private int internalInvoiceLineReference = 0;
     private java.util.UUID invoiceUuid;
@@ -46,7 +46,7 @@ public class PurchaseLedgerTransactionLine extends Importable
                                          String description, String productKey, int quantity, double price,
                                          double vat, String vatCode,
                                          Countries shippedFromCountry, Countries shippedToCountry,
-                                         SaleChannels shippedToChannel, int internalInvoiceReference,
+                                         Channels shippedToChannel, int internalInvoiceReference,
                                          int internalInvoiceLineReference, java.util.UUID invoiceUuid,
                                          Currencies currency,
                                          PurchaseLedgerTransactionType purchaseLedgerTransactionType)
@@ -247,12 +247,12 @@ public class PurchaseLedgerTransactionLine extends Importable
         this.shippedToCountry = shippedToCountry;
     }
 
-    public SaleChannels getShippedToChannel()
+    public Channels getShippedToChannel()
     {
         return shippedToChannel;
     }
 
-    public void setShippedToChannel(SaleChannels shippedToChannel)
+    public void setShippedToChannel(Channels shippedToChannel)
     {
         this.shippedToChannel = shippedToChannel;
     }

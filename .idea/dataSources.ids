@@ -23,9 +23,11 @@
       <column name="INVENTORY_TRANSACTION_LOCKED" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16" def="RkFMU0U="/>
       <column name="RETURN_COUNTER" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4" def="MA=="/>
       <column name="TRANSACTION_TYPE" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" def="J1BVUkNIQVNFJw=="/>
+      <column name="TRANSACTION_UUID" sqlType="VARBINARY" precision="2147483647" scale="0" nullable="false" jdbcType="-3"/>
       <primary-key name="CONSTRAINT_E" columns="INTERNAL_INVOICE_REFERENCE_KEY,INTERNAL_INVOICE_REFERENCE_LINE,ITEM_NUMBER,RETURN_COUNTER"/>
       <foreign-key name="INVENTORY_ITEMS_UK_AMAZON___FK" columns="PRODUCT_KEY" ref-table="PRODUCT" ref-schema="PUBLIC" ref-catalog="FASTDEAL" ref-columns="SELLER_SKU" update-rule="1" delete-rule="1" deferrability="2"/>
       <index name="INVENTORY_ITEMS_CONCATENATED_PRIMARY_KEY_UINDEX" unique="true" columns="CONCATENATED_PRIMARY_KEY"/>
+      <index name="INVENTORY_ITEMS_GB_AMAZON_TRANSACTION_UUID_UINDEX" unique="true" columns="TRANSACTION_UUID"/>
       <index name="INVENTORY_ITEMS_SINGLE_ITEM_UUID_UINDEX" unique="true" columns="SINGLE_ITEM_UUID"/>
       <index name="INVENTORY_ITEMS_UK_AMAZON___FK_INDEX_7" unique="false" columns="PRODUCT_KEY"/>
     </table>
@@ -81,9 +83,9 @@
       <column name="SHIP_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="QUANTITY" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="TRANSACTION_PRICE" sqlType="DOUBLE" precision="17" scale="0" nullable="false" jdbcType="8"/>
-      <column name="TRANSACTION_ADDITIONAL_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
-      <column name="TRANSACTION_CHANNEL" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
-      <column name="TRANSACTION_CHANNEL_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="LOGISTIC_ADDITIONAL_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="LOGISTIC_CHANNEL" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="LOGISTIC_CHANNEL_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="CURRENCY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="TRANSACTION_ID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="TRANSACTION_LINE_ID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
@@ -93,6 +95,10 @@
       <column name="TRANSACTION_TIMESTAMP" sqlType="TIMESTAMP" precision="23" scale="10" nullable="false" jdbcType="93"/>
       <column name="TRANSACTION_LOCK" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16"/>
       <column name="ITEM_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="false" jdbcType="-2"/>
+      <column name="MERCHANT_CHANNEL" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="MERCHANT_CHANNEL_FEES" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="IS_RETURNED" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16" def="RkFMU0U="/>
+      <column name="MERCHANT_CHANNEL_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" def="J0dCJw=="/>
       <primary-key name="CONSTRAINT_9" columns="TRANSACTION_LINE_UUID"/>
     </table>
     <table name="V_INVENTORY_FOR_SALE_BY_PRODUCT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">

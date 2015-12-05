@@ -3,7 +3,7 @@ package Test;
 import Software.Enums.Countries;
 import Software.Enums.Currencies;
 import Software.Enums.PurchaseLedgerTransactionType;
-import Software.Enums.SaleChannels;
+import Software.Enums.Channels;
 import Software.Utilities.Importable;
 import Software.PurchaseLedger.DbManagerPurchaseLedger;
 import Software.PurchaseLedger.PurchaseLedgerTransactionLine;
@@ -22,7 +22,7 @@ public class DbManagerPurchaseLedgerTest
 {
     Importable importableTest = new PurchaseLedgerTransactionLine("31/10/2015", "supplierID", "externalAccountingReference",
             "description", "productKey", 700, 1.50, 0.3, "vatCode", Countries.IT , Countries.GB,
-            SaleChannels.AMAZON, 1, 1,
+            Channels.AMAZON, 1, 1,
             java.util.UUID.fromString(String.valueOf(new UUID())),
             Currencies.GBP, PurchaseLedgerTransactionType.INVOICE);
 
@@ -112,7 +112,7 @@ public class DbManagerPurchaseLedgerTest
         assert (testLine.getPurchaseLedgerTransactionType().equals(PurchaseLedgerTransactionType.ACCRUAL));
         assert (testLine.getShippedFromCountry().equals(Countries.IT));
         assert (testLine.getShippedToCountry().equals(Countries.GB));
-        assert (testLine.getShippedToChannel().equals(SaleChannels.AMAZON));
+        assert (testLine.getShippedToChannel().equals(Channels.AMAZON));
         assert (testLine.getTransactionDate().equals("2015-10-28"));
         assert (testLine.getSupplierID().equals("AllBrands"));
         assert (testLine.getDescription().equals("Accrual as invoice has not been received yet"));

@@ -2,7 +2,7 @@ package Software.SalesLedger;
 
 import Software.Enums.Countries;
 import Software.Enums.Currencies;
-import Software.Enums.SaleChannels;
+import Software.Enums.Channels;
 import Software.Enums.SaleLedgerTransactionType;
 import Software.Utilities.Importable;
 
@@ -19,10 +19,11 @@ public class SalesLedgerLine extends Importable
 
     public SalesLedgerLine(String date, String channelId, String productId, String transactionCity,
                            String transactionPostCode, Countries shipToCountry, int quantity,
-                           double transactionPrice, double transactionAssociatedCos, SaleChannels transactionChannel,
+                           double transactionPrice, double transactionAssociatedCos, Channels transactionChannel,
                            Countries countryTransactionChannel, Currencies currency, int transactionGroupId,
                            int transactionLineId, SaleLedgerTransactionType transactionLineStatus, String itemId,
-                           UUID itemUUID)
+                           UUID itemUUID, Channels merchantChannel, Countries merchantChannelCountry,
+                           double merchantChannelCos)
     {
         properties.put("date", date);
         properties.put("channelSaleId", channelId);
@@ -32,9 +33,9 @@ public class SalesLedgerLine extends Importable
         properties.put("shipToCountry", shipToCountry);
         properties.put("quantity", quantity);
         properties.put("transactionPrice", transactionPrice);
-        properties.put("transactionAssociatedCos", transactionAssociatedCos);
-        properties.put("transactionChannel", transactionChannel);
-        properties.put("countryTransactionChannel",countryTransactionChannel);
+        properties.put("logisticAssociatedCos", transactionAssociatedCos);
+        properties.put("logisticChannel", transactionChannel);
+        properties.put("countryLogisticChannel",countryTransactionChannel);
         properties.put("currency", currency);
         properties.put("transactionGroupId", transactionGroupId);
         properties.put("transactionLineId", transactionLineId);
@@ -42,6 +43,9 @@ public class SalesLedgerLine extends Importable
         properties.put("transactionLineStatus", transactionLineStatus);
         properties.put("itemId", itemId);
         properties.put("itemUUID", itemUUID);
+        properties.put("merchantChannel", merchantChannel);
+        properties.put("merchantChannelCountry", merchantChannelCountry);
+        properties.put("merchantChannelCos", merchantChannelCos);
     }
 
     public Map getProperties()

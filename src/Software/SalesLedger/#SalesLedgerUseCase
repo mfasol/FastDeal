@@ -1,8 +1,9 @@
 Sales Ledger Requirements
-1 - Register Sale, with associated additional COS (When relevant) and associate inventory item.
-2 - Reverse Sale, deal with associated additional COS (When relevant) and deal with associate inventory item.
-  depending from consequences of reverse sale.
-3 - Retrieve sale
+1 - Register a Sale
+2 - Refund a Sale
+3 - Retrieve a sale
+4 - Reverse a sale
+4 - Signal to the inventory when an item is returned
 
 
 Register Sales Use case - Requirement 1
@@ -17,12 +18,12 @@ Register Sales Use case - Requirement 1
     persistence unit).
 
 
-Reverse Sales Use case - Requirement 2
-1 - A sale, for some reason, is cancelled;
-2 - The original sale is untouched; refunds might have several weeks time gap with the related sale;
-3 - A new refund entry in the sale ledger is created.
-4 - Revenue is the refunded amount (with minus sign).
+Refund Sales Use case - Requirement 2
+1 - A sale is refunded;
+2 - The original sale gets flagged as refunded;
+3 - The refund transaction gets most of the details from the sales transaction it reverses;
+4 - Revenue is the refunded amount; it is negative as it reduces the income for the period.
     4.1 (OPTIONAL) - If part of the merchant commissions are refunded, it will reduce the COS of the refund line.
-5 - Both, refund and cloned inventory item are persisted.
+5 - Refund is persisted.
 
 
