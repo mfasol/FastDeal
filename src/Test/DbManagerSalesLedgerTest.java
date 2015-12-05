@@ -1,9 +1,10 @@
 package Test;
 
+import Software.Inventory.DbManagerInventoryItems;
 import Software.SalesLedger.DbManagerSalesLedger;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by Michele on 29/11/2015.
@@ -11,6 +12,8 @@ import static org.junit.Assert.*;
 public class DbManagerSalesLedgerTest
 {
     DbManagerSalesLedger dbManagerSalesLedger = new DbManagerSalesLedger();
+    DbManagerSalesLedger mockDatabase = mock(DbManagerSalesLedger.class);
+
     @Test
     public void testPersistTarget() throws Exception
     {
@@ -26,12 +29,24 @@ public class DbManagerSalesLedgerTest
     @Test
     public void testRetrieveSaleLedgerTransaction() throws Exception
     {
-        System.out.println(dbManagerSalesLedger.retrieveSaleLedgerTransaction("205-8088969-6662712","Proraso Sapone Tubo Rinfrescante"));
+        System.out.println(dbManagerSalesLedger.getTransactionByExternalId("205-8088969-6662712","Proraso Sapone Tubo Rinfrescante"));
     }
 
     @Test
     public void testUpdateStatus() throws Exception
     {
+        mockDatabase.updateStatus("REFUND","1dc96860-97bd-11e5-ba4e-be53ae3a8f5c");
+    }
 
+    @Test
+    public void testGetTransactionByUUID() throws Exception
+    {
+        System.out.println(dbManagerSalesLedger.getTransactionByUUID("1dc96860-97bd-11e5-ba4e-be53ae3a8f5c").getProperties());
+    }
+
+    @Test
+    public void testGetItemForRefund() throws Exception
+    {
+        System.out.println(dbManagerSalesLedger.getItemForRefund("205-8088969-6662712","Proraso Sapone Tubo Rinfrescante").getProperties());
     }
 }

@@ -97,8 +97,8 @@
       <column name="ITEM_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="false" jdbcType="-2"/>
       <column name="MERCHANT_CHANNEL" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="MERCHANT_CHANNEL_FEES" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
-      <column name="IS_RETURNED" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16" def="RkFMU0U="/>
-      <column name="MERCHANT_CHANNEL_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" def="J0dCJw=="/>
+      <column name="IS_REFUNDED" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16" def="RkFMU0U="/>
+      <column name="MERCHANT_CHANNEL_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="CONSTRAINT_9" columns="TRANSACTION_LINE_UUID"/>
     </table>
     <table name="V_INVENTORY_FOR_SALE_BY_PRODUCT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">

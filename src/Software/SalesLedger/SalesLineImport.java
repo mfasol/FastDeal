@@ -74,11 +74,12 @@ public class SalesLineImport extends Importer
             String productKey =  csvRecord.get(PRODUCT_KEY);
             String country = csvRecord.get(TRANSACTION_CHANNEL_COUNTRY);
             String channel = csvRecord.get(TRANSACTION_CHANNEL);
+            String externalId = csvRecord.get(EXTERNAL_ORDER_ID);
             InventoryItem tempItem = dbManagerInventoryItems.getItemForSale(productKey,country,channel);
             String itemId = tempItem.getPrimaryKey();
             UUID itemUUID = tempItem.getItemUuid();
 
-            salesLedgerLine = new SalesLedgerLine(csvRecord.get(TRANSACTION_DATE),csvRecord.get(EXTERNAL_ORDER_ID),
+            salesLedgerLine = new SalesLedgerLine(csvRecord.get(TRANSACTION_DATE),externalId,
                     productKey,csvRecord.get(TRANSACTION_CITY),csvRecord.get(TRANSACTION_POSTCODE),
                     Countries.valueOf(csvRecord.get(TRANSACTION_COUNTRY)),
                     1,itemPrice, itemAdditionalCos,
@@ -95,10 +96,12 @@ public class SalesLineImport extends Importer
             }
             else if(csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
             {
+                SalesLedgerLine tempSalesLedgerLine =  dbManagerSalesLedger.getItemForRefund(externalId, productKey);
+                dbManagerSalesLedger.flagForRefund(
+                        String.valueOf(tempSalesLedgerLine.getProperty("transactionLineUUID")));
+
                 salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.REFUND);
             }
-
-
 
             dbManagerSalesLedger.persistTarget(salesLedgerLine);
 
