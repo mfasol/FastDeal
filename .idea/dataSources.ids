@@ -105,14 +105,26 @@
       <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="COUNT(CONCATENATED_PRIMARY_KEY)" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
     </table>
+    <table name="V_PROFIT_BY_CHANNEL" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="ITEM" sqlType="VARCHAR" precision="11" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SALES" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+    </table>
     <table name="V_SALES_CONTRIBUTION" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="TRANSACTION_DATE" sqlType="DATE" precision="8" scale="0" nullable="true" jdbcType="91"/>
       <column name="ITEM_ID" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="SALES" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
-      <column name="MER_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="LOG_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="REF_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_FULFIL_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="CONT_AFT_MERCH" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="PROFIT" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="SALES_CHANNEL" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SALES_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="LOGISTIC_CHANNEL" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="LOGISTIC_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TYPE" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
     </table>
     <table name="V_SALES_CONTRIBUTION_BY_PRODUCT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
