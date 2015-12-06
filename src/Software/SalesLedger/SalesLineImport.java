@@ -91,7 +91,7 @@ public class SalesLineImport extends Importer
                             Countries.valueOf(csvRecord.get(MERCHANT_CHANNEL_COUNTRY)),
                             Double.parseDouble(csvRecord.get(MERCHANT_CHANNEL_FEES)));
 
-            if(csvRecord.get(TRANSACTION_TYPE).equals("Order Payment"))
+            if(csvRecord.get(TRANSACTION_TYPE).equals("Order Payment") & (itemId!=null))
             {
                 salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.SALE);
                 dbManagerInventoryItems.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD, country, channel);
@@ -104,6 +104,10 @@ public class SalesLineImport extends Importer
 
                 salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.REFUND);
                 salesLedgerLine.setProperty("itemUUID", tempSalesLedgerLine.getProperty("itemUUID"));
+            }
+            else
+            {
+                System.out.println("ERROR " + csvRecord.toString());
             }
 
             dbManagerSalesLedger.persistTarget(salesLedgerLine);
