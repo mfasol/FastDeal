@@ -260,7 +260,6 @@ public class DbManagerSalesLedger implements DbManagerInterface
         return salesLedgerLine;
     }
 
-
     public int internalTransactionNumberGenerator()
     {
         try
@@ -289,8 +288,4 @@ public class DbManagerSalesLedger implements DbManagerInterface
         }
         return internalTransactionNumber;
     }
-
-
-
-
 }

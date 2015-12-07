@@ -23,7 +23,7 @@ public class DbManagerInventoryItemsTest
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
-            "seller-sku" ,5.00, Countries.GB, Channels.AMAZON, "31/10/2015");
+            null ,5.00, Countries.GB, Channels.AMAZON, "31/10/2015");
 
     DbManagerInventoryItems mockDatabase = mock(DbManagerInventoryItems.class);
     DbManagerInventoryItems dbManagerInventoryItems = new DbManagerInventoryItems();
@@ -44,6 +44,7 @@ public class DbManagerInventoryItemsTest
     @Test
     public void testPersistTarget() throws Exception
     {
+        System.out.println(importableTest.toString());
         mockDatabase.persistTarget(importableTest);
 
         verify(mockDatabase, times(1)).persistTarget(importableTest);
