@@ -247,6 +247,10 @@ public class DbManagerInventoryItems implements DbManagerInterface
             {
                 inventoryItem = toInventoryItem(resultSet);
             }
+            else // no item is available for sale
+            {
+                inventoryItem = null;
+            }
             resultSet.close();
             preparedStatement.close();
 

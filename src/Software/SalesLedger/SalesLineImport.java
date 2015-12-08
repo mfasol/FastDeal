@@ -73,46 +73,53 @@ public class SalesLineImport extends Importer
 
         for (int i = 1; i <= productQuantity ; i++)
         {
+
             String productKey =  csvRecord.get(PRODUCT_KEY);
             String country = csvRecord.get(TRANSACTION_CHANNEL_COUNTRY);
             String channel = csvRecord.get(TRANSACTION_CHANNEL);
             String externalId = csvRecord.get(EXTERNAL_ORDER_ID);
-            InventoryItem tempItem = dbManagerInventoryItems.getItemForSale(productKey,country,channel);
-            String itemId = tempItem.getPrimaryKey();
-            UUID itemUUID = tempItem.getItemUuid();
 
-            salesLedgerLine = new SalesLedgerLine(csvRecord.get(TRANSACTION_DATE),externalId,
-                    productKey,csvRecord.get(TRANSACTION_CITY),csvRecord.get(TRANSACTION_POSTCODE),
-                    Countries.valueOf(csvRecord.get(TRANSACTION_COUNTRY)),
-                    1,itemPrice, itemAdditionalCos,
-                    Channels.valueOf(channel), Countries.valueOf(country), Currencies.valueOf(csvRecord.get(CURRENCY)),
-                    transactionGroupId, transactionLineId,SaleLedgerTransactionType.SALE, itemId, itemUUID,
-                    Channels.valueOf(csvRecord.get(MERCHANT_CHANNEL)),
-                            Countries.valueOf(csvRecord.get(MERCHANT_CHANNEL_COUNTRY)),
-                            Double.parseDouble(csvRecord.get(MERCHANT_CHANNEL_FEES)));
-
-            if(csvRecord.get(TRANSACTION_TYPE).equals("Order Payment") & (itemId!=null))
+            InventoryItem tempItem = dbManagerInventoryItems.getItemForSale(productKey, country, channel);
+            if (tempItem!= null)
             {
-                salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.SALE);
-                dbManagerInventoryItems.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD, country, channel);
-            }
-            else if(csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
-            {
-                SalesLedgerLine tempSalesLedgerLine =  dbManagerSalesLedger.getItemForRefund(externalId, productKey);
-                dbManagerSalesLedger.flagForRefund(
-                        String.valueOf(tempSalesLedgerLine.getProperty("transactionLineUUID")));
+                String itemId = tempItem.getPrimaryKey();
+                UUID itemUUID = tempItem.getItemUuid();
 
-                salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.REFUND);
-                salesLedgerLine.setProperty("itemUUID", tempSalesLedgerLine.getProperty("itemUUID"));
+                salesLedgerLine = new SalesLedgerLine(csvRecord.get(TRANSACTION_DATE), externalId,
+                        productKey, csvRecord.get(TRANSACTION_CITY), csvRecord.get(TRANSACTION_POSTCODE),
+                        Countries.valueOf(csvRecord.get(TRANSACTION_COUNTRY)),
+                        1, itemPrice, itemAdditionalCos,
+                        Channels.valueOf(channel), Countries.valueOf(country), Currencies.valueOf(csvRecord.get(CURRENCY)),
+                        transactionGroupId, transactionLineId, SaleLedgerTransactionType.SALE, itemId, itemUUID,
+                        Channels.valueOf(csvRecord.get(MERCHANT_CHANNEL)),
+                        Countries.valueOf(csvRecord.get(MERCHANT_CHANNEL_COUNTRY)),
+                        Double.parseDouble(csvRecord.get(MERCHANT_CHANNEL_FEES)));
+
+                if (csvRecord.get(TRANSACTION_TYPE).equals("Order Payment") & (itemId != null))
+                {
+                    salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.SALE);
+                    dbManagerInventoryItems.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD, country, channel);
+                } else if (csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
+                {
+                    SalesLedgerLine tempSalesLedgerLine = dbManagerSalesLedger.getItemForRefund(externalId, productKey);
+                    dbManagerSalesLedger.flagForRefund(
+                            String.valueOf(tempSalesLedgerLine.getProperty("transactionLineUUID")));
+
+                    salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.REFUND);
+                    salesLedgerLine.setProperty("itemUUID", tempSalesLedgerLine.getProperty("itemUUID"));
+                } else
+                {
+                    System.out.println("ERROR " + csvRecord.toString());
+                }
+
+                dbManagerSalesLedger.persistTarget(salesLedgerLine);
+
+                transactionLineId++;
             }
             else
             {
-                System.out.println("ERROR " + csvRecord.toString());
+                System.out.println("NO ITEM AVAILABLE FOR SALE " + csvRecord.toString());
             }
-
-            dbManagerSalesLedger.persistTarget(salesLedgerLine);
-
-            transactionLineId++;
         }
     }
 }

@@ -43,6 +43,7 @@
       <column name="STORE_TIMESTAMP" sqlType="TIMESTAMP" precision="23" scale="10" nullable="true" jdbcType="93"/>
       <column name="STORE_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="true" jdbcType="-2"/>
       <primary-key name="PRODUCT_PRODUCT_KEY_PK" columns="PRODUCT_KEY"/>
+      <exported-key name="INVENTORY_ITEMS_UK_AMAZON___FK" table="INVENTORY_ITEMS_GB_AMAZON" schema="PUBLIC" catalog="FASTDEAL" columns="PRODUCT_KEY"/>
       <index name="PRODUCT_ASIN_UINDEX" unique="true" columns="ASIN"/>
       <index name="PRODUCT_SELLER_SKU_UINDEX" unique="true" columns="SELLER_SKU"/>
     </table>
@@ -102,7 +103,7 @@
     </table>
     <table name="V_INVENTORY_FOR_SALE_BY_PRODUCT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
-      <column name="COUNT(CONCATENATED_PRIMARY_KEY)" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+      <column name="NUMBER" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
     </table>
     <table name="V_PROFIT_BY_CHANNEL" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="ITEM" sqlType="VARCHAR" precision="11" scale="0" nullable="true" jdbcType="12"/>
