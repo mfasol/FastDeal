@@ -227,6 +227,8 @@ public class DbManagerInventoryItems implements DbManagerInterface
 
     public InventoryItem getItemForSale(String productKey, String country, String saleChannel)
     {
+        inventoryItem = null; // reset inventory item
+
         queryTableName = TABLE_NAME+"_"+country+"_"+saleChannel;
         try
         {
@@ -247,10 +249,7 @@ public class DbManagerInventoryItems implements DbManagerInterface
             {
                 inventoryItem = toInventoryItem(resultSet);
             }
-            else // no item is available for sale
-            {
-                inventoryItem = null;
-            }
+
             resultSet.close();
             preparedStatement.close();
 
