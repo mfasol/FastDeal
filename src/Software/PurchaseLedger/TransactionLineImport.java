@@ -3,7 +3,7 @@ package Software.PurchaseLedger;
 import DbServer.DbManagerInterface;
 import Software.Enums.*;
 import Software.Utilities.Importer;
-import Software.Inventory.DbManagerInventoryItems;
+import Software.Inventory.DbManagerInventory;
 import Software.Inventory.InventoryItem;
 import com.eaio.uuid.UUID;
 import org.apache.commons.csv.CSVRecord;
@@ -158,7 +158,7 @@ public class TransactionLineImport extends Importer
         {
             quantity = new DbManagerPurchaseLedger().retrieveTransactionGroupQuantity(transactionGroupKey);
             cosPerUnit = cos / quantity;
-            new DbManagerInventoryItems().updateTransactionGroupCos(transactionGroupKey, cosPerUnit);
+            new DbManagerInventory().updateTransactionGroupCos(transactionGroupKey, cosPerUnit);
         }
 
         else
@@ -166,7 +166,7 @@ public class TransactionLineImport extends Importer
             quantity = new DbManagerPurchaseLedger().retrieveTransactionLineQuantity(transactionGroupKey,
                     transactionLineKey);
             cosPerUnit = cos / quantity;
-            new DbManagerInventoryItems().updateTransactionLineCos(transactionGroupKey, transactionLineKey,
+            new DbManagerInventory().updateTransactionLineCos(transactionGroupKey, transactionLineKey,
                     cosPerUnit);
         }
     }

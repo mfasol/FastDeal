@@ -3,13 +3,10 @@ package DbClient;
 
 
 
-import DbServer.ConnectionData;
-import Software.Inventory.DbManagerInventoryItems;
 import Software.Utilities.RootGui;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.sql.*;
 import java.text.ParseException;
 
 

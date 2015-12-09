@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * Created by Michele on 03/11/2015.
  */
-public class DbManagerInventoryItems implements DbManagerInterface
+public class DbManagerInventory implements DbManagerInterface
 {
     private ConnectionData connectionData = new ConnectionData();
     private InventoryItem inventoryItem;

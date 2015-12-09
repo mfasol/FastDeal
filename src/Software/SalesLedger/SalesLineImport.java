@@ -2,7 +2,7 @@ package Software.SalesLedger;
 
 import Software.Enums.*;
 import Software.Utilities.Importer;
-import Software.Inventory.DbManagerInventoryItems;
+import Software.Inventory.DbManagerInventory;
 import Software.Inventory.InventoryItem;
 import org.apache.commons.csv.CSVRecord;
 
@@ -21,7 +21,7 @@ public class SalesLineImport extends Importer
     int transactionLineId = 1;
 
     SalesLedgerLine salesLedgerLine;
-    DbManagerInventoryItems dbManagerInventoryItems = new DbManagerInventoryItems();
+    DbManagerInventory dbManagerInventory = new DbManagerInventory();
 
     private final int TRANSACTION_DATE = 0;
     private final int EXTERNAL_ORDER_ID = 1;
@@ -79,7 +79,7 @@ public class SalesLineImport extends Importer
             String channel = csvRecord.get(TRANSACTION_CHANNEL);
             String externalId = csvRecord.get(EXTERNAL_ORDER_ID);
 
-            InventoryItem tempItem = dbManagerInventoryItems.getItemForSale(productKey, country, channel);
+            InventoryItem tempItem = dbManagerInventory.getItemForSale(productKey, country, channel);
             if (tempItem!= null)
             {
                 String itemId = tempItem.getPrimaryKey();
@@ -98,7 +98,7 @@ public class SalesLineImport extends Importer
                 if (csvRecord.get(TRANSACTION_TYPE).equals("Order Payment") & (itemId != null))
                 {
                     salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.SALE);
-                    dbManagerInventoryItems.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD, country, channel);
+                    dbManagerInventory.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD, country, channel);
                 } else if (csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
                 {
                     SalesLedgerLine tempSalesLedgerLine = dbManagerSalesLedger.getItemForRefund(externalId, productKey);

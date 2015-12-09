@@ -4,7 +4,7 @@ import Software.Enums.Countries;
 import Software.Enums.InventoryItemStatus;
 import Software.Enums.Channels;
 import Software.Utilities.Importable;
-import Software.Inventory.DbManagerInventoryItems;
+import Software.Inventory.DbManagerInventory;
 import Software.Inventory.InventoryItem;
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by Michele on 15/11/2015.
  */
-public class DbManagerInventoryItemsTest
+public class DbManagerInventoryTest
 {
     Importable importableTest = new InventoryItem(1, 2, 1,
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
@@ -25,8 +25,8 @@ public class DbManagerInventoryItemsTest
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
             null ,5.00, Countries.GB, Channels.AMAZON, "31/10/2015");
 
-    DbManagerInventoryItems mockDatabase = mock(DbManagerInventoryItems.class);
-    DbManagerInventoryItems dbManagerInventoryItems = new DbManagerInventoryItems();
+    DbManagerInventory mockDatabase = mock(DbManagerInventory.class);
+    DbManagerInventory dbManagerInventory = new DbManagerInventory();
 
     @Before
     public void setUp() throws Exception
@@ -84,7 +84,7 @@ public class DbManagerInventoryItemsTest
     @Test
     public void testGetItemForSale() throws Exception
     {
-        InventoryItem inventoryItem = dbManagerInventoryItems.getItemForSale(
+        InventoryItem inventoryItem = dbManagerInventory.getItemForSale(
                 "Proraso Sapone Tubo Rinfrescante","GB","AMAZON");
 
         System.out.println(inventoryItem.toString());

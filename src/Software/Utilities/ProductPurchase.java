@@ -1,7 +1,7 @@
 package Software.Utilities;
 
 import DbServer.DbManagerInterface;
-import Software.Inventory.DbManagerInventoryItems;
+import Software.Inventory.DbManagerInventory;
 
 /**
  * Created by Michele on 03/11/2015.
@@ -20,7 +20,7 @@ public class ProductPurchase implements InventoryModifier
     @Override
     public void modifyInventory(AbstractInventory targetInventory)
     {
-        targetDbManager = new DbManagerInventoryItems();
+        targetDbManager = new DbManagerInventory();
         this.targetInventory = targetInventory;
         this.addToInventory();
     }

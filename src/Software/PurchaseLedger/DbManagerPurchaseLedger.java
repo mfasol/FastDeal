@@ -7,7 +7,7 @@ import Software.Enums.Currencies;
 import Software.Enums.PurchaseLedgerTransactionType;
 import Software.Enums.Channels;
 import Software.Utilities.Importable;
-import Software.Inventory.DbManagerInventoryItems;
+import Software.Inventory.DbManagerInventory;
 
 import java.sql.*;
 import java.text.DateFormat;
@@ -28,7 +28,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
     PurchaseLedgerTransactionLine purchaseLedgerTransactionLine;
     PreparedStatement preparedStatement;
     final String TABLE_NAME = "PURCHASE_LEDGER";
-    DbManagerInventoryItems dbManagerInventoryItems = new DbManagerInventoryItems();
+    DbManagerInventory dbManagerInventory = new DbManagerInventory();
 
     private int internalTransactionNumber = 0;
 
@@ -541,7 +541,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
                             (retrieveTransactionGroupQuantity(purchaseLedgerTransactionLine.
                                     getAssociatedTransactionGroupReference())));
 
-                    dbManagerInventoryItems.updateTransactionGroupCos(
+                    dbManagerInventory.updateTransactionGroupCos(
                             purchaseLedgerTransactionLine.getAssociatedTransactionGroupReference(),unitCos);
                 }
                 else
@@ -552,7 +552,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
                                     purchaseLedgerTransactionLine.
                                             getAssociatedTransactionLineReference())));
 
-                    dbManagerInventoryItems.updateTransactionLineCos(
+                    dbManagerInventory.updateTransactionLineCos(
                             purchaseLedgerTransactionLine.getAssociatedTransactionGroupReference(),
                             purchaseLedgerTransactionLine.getAssociatedTransactionLineReference(),
                             unitCos);
