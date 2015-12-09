@@ -57,8 +57,8 @@ public class DbManagerInventoryItems implements DbManagerInterface
                     "INTERNAL_INVOICE_REFERENCE_KEY, INTERNAL_INVOICE_REFERENCE_LINE, ITEM_NUMBER, " +
                     "CONCATENATED_PRIMARY_KEY, INVOICE_UUID, INVOICE_LINE_UUID, PRODUCT_KEY,ROUND (ITEM_COS, 12)," +
                     "SINGLE_ITEM_UUID, ITEM_DATE, INVENTORY_ITEM_STATUS, INVENTORY_ITEM_CURRENCY," +
-                    "INVENTORY_ITEM_STORE_TIMESTAMP, RETURN_COUNTER, TRANSACTION_TYPE )" +
-                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    "INVENTORY_ITEM_STORE_TIMESTAMP, RETURN_COUNTER, TRANSACTION_TYPE, TRANSACTION_UUID )" +
+                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             // needed for converting a string in java date
             DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -85,6 +85,7 @@ public class DbManagerInventoryItems implements DbManagerInterface
             preparedStatement.setTimestamp(13, java.sql.Timestamp.from(Instant.now()));
             preparedStatement.setInt(14, inventoryItem.getReturnCounter());
             preparedStatement.setString(15, String.valueOf(inventoryItem.getInventoryItemTransactionTypes()));
+            preparedStatement.setString(16, String.valueOf(inventoryItem.getItemUuid()));
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
