@@ -107,6 +107,7 @@ public class SalesLineImport extends Importer
 
                     salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.REFUND);
                     salesLedgerLine.setProperty("itemUUID", tempSalesLedgerLine.getProperty("itemUUID"));
+                    salesLedgerLine.setProperty("itemId", tempSalesLedgerLine.getProperty("itemId"));
                 } else
                 {
                     System.out.println("ERROR " + csvRecord.toString());
