@@ -100,21 +100,21 @@
       <column name="MERCHANT_CHANNEL_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="CONSTRAINT_9" columns="TRANSACTION_LINE_UUID"/>
     </table>
-    <table name="V_INVENTORY_FOR_SALE_BY_PRODUCT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
-      <column name="PRODUCT" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
-      <column name="TOTAL" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
-      <column name="AVAILABLE_FOR_SALE" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
-      <column name="INVENTORY_SOLD" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
-      <column name="TOTAL_SALES" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
-    </table>
-    <table name="V_INVENTORY_PURCHASE_LEDGER_CHECK" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+    <table name="V_INVENTORY_PRODUCT_STATUS_PIVOT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
-      <column name="TOTAL" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
+      <column name="SOLD" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
+      <column name="SELLABLE" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
+      <column name="CHECK" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
     </table>
     <table name="V_PROFIT_BY_CHANNEL" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="ITEM" sqlType="VARCHAR" precision="11" scale="0" nullable="true" jdbcType="12"/>
       <column name="AMAZON" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
       <column name="EBAY" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+    </table>
+    <table name="V_PURCHASE_LEDGER_PRODUCT_STATUS_PIVOT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TOTAL" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
+      <column name="ACCRUAL" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
     </table>
     <table name="V_SALES_CONTRIBUTION" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="TRANSACTION_DATE" sqlType="DATE" precision="8" scale="0" nullable="true" jdbcType="91"/>

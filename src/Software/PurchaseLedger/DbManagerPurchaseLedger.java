@@ -524,6 +524,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
 
                 purchaseLedgerTransactionLine.setTransactionDate(transactionDate);
                 purchaseLedgerTransactionLine.setPurchaseLedgerTransactionType(PurchaseLedgerTransactionType.REVERSAL);
+                purchaseLedgerTransactionLine.setIsInventoryRelevant(false);
                 purchaseLedgerTransactionLine.setPrice(purchaseLedgerTransactionLine.getPrice() * -1);
                 purchaseLedgerTransactionLine.setVat(purchaseLedgerTransactionLine.getVat() * -1);
                 purchaseLedgerTransactionLine.setQuantity(purchaseLedgerTransactionLine.getQuantity() * -1);
