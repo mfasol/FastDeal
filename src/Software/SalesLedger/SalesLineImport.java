@@ -99,15 +99,24 @@ public class SalesLineImport extends Importer
                 {
                     salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.SALE);
                     dbManagerInventory.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD, country, channel);
-                } else if (csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
+                }
+                else if (csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
                 {
-                    SalesLedgerLine tempSalesLedgerLine = dbManagerSalesLedger.getItemForRefund(externalId, productKey);
-                    dbManagerSalesLedger.flagForRefund(
-                            String.valueOf(tempSalesLedgerLine.getProperty("transactionLineUUID")));
+                    try
+                    {
+                        SalesLedgerLine tempSalesLedgerLine = dbManagerSalesLedger.getItemForRefund(externalId, productKey);
+                        dbManagerSalesLedger.flagForRefund(
+                                String.valueOf(tempSalesLedgerLine.getProperty("transactionLineUUID")));
 
-                    salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.REFUND);
-                    salesLedgerLine.setProperty("itemUUID", tempSalesLedgerLine.getProperty("itemUUID"));
-                    salesLedgerLine.setProperty("itemId", tempSalesLedgerLine.getProperty("itemId"));
+                        salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.REFUND);
+                        salesLedgerLine.setProperty("itemUUID", tempSalesLedgerLine.getProperty("itemUUID"));
+                        salesLedgerLine.setProperty("itemId", tempSalesLedgerLine.getProperty("itemId"));
+                    }
+                    catch (NullPointerException npExc)
+                    {
+                        System.out.println("NO TRANSACTION TO BE REFUNDED!!" + csvRecord.toString());
+                    }
+
                 } else
                 {
                     System.out.println("ERROR " + csvRecord.toString());

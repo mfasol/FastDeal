@@ -54,6 +54,6 @@ public class DbManagerSalesLedgerTest
     @Test
     public void testGetItemForRefund() throws Exception
     {
-        System.out.println(dbManagerSalesLedger.getItemForRefund("205-8088969-6662712","Proraso Sapone Tubo Rinfrescante").getProperties());
+        System.out.println(dbManagerSalesLedger.getItemForRefund("205-8559649-3864336","Proraso Sapone Ciotola Anti - Irritazion").getProperties());
     }
 }

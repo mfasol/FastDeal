@@ -122,6 +122,32 @@
       <column name="ACCRUAL" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
       <column name="CHECK" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
     </table>
+    <table name="V_REFUND_CHECKER" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="TRANSACTION_DATE" sqlType="DATE" precision="8" scale="0" nullable="true" jdbcType="91"/>
+      <column name="EXTERNAL_TRANSACTION_ID" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SHIP_CITY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SHIP_POSTCODE" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SHIP_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="QUANTITY" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="TRANSACTION_PRICE" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="LOGISTIC_ADDITIONAL_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="LOGISTIC_CHANNEL" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="LOGISTIC_CHANNEL_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="CURRENCY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TRANSACTION_ID" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="TRANSACTION_LINE_ID" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="TRANSACTION_LINE_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="true" jdbcType="-2"/>
+      <column name="TRANSACTION_STATUS" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ITEM_ID" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TRANSACTION_TIMESTAMP" sqlType="TIMESTAMP" precision="23" scale="10" nullable="true" jdbcType="93"/>
+      <column name="TRANSACTION_LOCK" sqlType="BOOLEAN" precision="1" scale="0" nullable="true" jdbcType="16"/>
+      <column name="ITEM_UUID" sqlType="UUID" precision="2147483647" scale="0" nullable="true" jdbcType="-2"/>
+      <column name="MERCHANT_CHANNEL" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="MERCHANT_CHANNEL_FEES" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="IS_REFUNDED" sqlType="BOOLEAN" precision="1" scale="0" nullable="true" jdbcType="16"/>
+      <column name="MERCHANT_CHANNEL_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+    </table>
     <table name="V_SALES_CONTRIBUTION" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="TRANSACTION_DATE" sqlType="DATE" precision="8" scale="0" nullable="true" jdbcType="91"/>
       <column name="ITEM_ID" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
