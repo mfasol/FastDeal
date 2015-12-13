@@ -1,5 +1,7 @@
 package Test;
 
+import Software.Products.DbManagerProducts;
+import Software.Products.Product;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +13,8 @@ import static org.junit.Assert.*;
  */
 public class DbManagerProductsTest //TODO
 {
+    Product testProduct = new Product("B0082BYLS6", "8004395001019", "Proraso Crema Prebarba Rinfrescante 100", "Proraso Pre and Post Shave Cream (100 ml)","Proraso","13/10/2015" );
+    DbManagerProducts  dbManagerProducts = new DbManagerProducts();
 
     @Before
     public void setUp() throws Exception
@@ -27,7 +31,7 @@ public class DbManagerProductsTest //TODO
     @Test
     public void testPersistTarget() throws Exception
     {
-
+        dbManagerProducts.persistTarget(testProduct);
     }
 
     @Test

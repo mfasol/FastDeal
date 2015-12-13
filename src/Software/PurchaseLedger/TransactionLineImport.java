@@ -19,7 +19,7 @@ import org.apache.commons.csv.CSVRecord;
 public class TransactionLineImport extends Importer
 {
     DbManagerInterface dbManagerPurchaseLedger = new DbManagerPurchaseLedger();
-    DbManagerInterface dbManagerInventoryItems;
+    DbManagerInterface dbManagerInventoryItems = new DbManagerInventory();
 
     PurchaseLedgerTransactionLine purchaseLedgerTransactionLine;
     InventoryItem inventoryItem;
@@ -29,7 +29,7 @@ public class TransactionLineImport extends Importer
 
     int invoiceNumber = new DbManagerPurchaseLedger().internalTransactionNumberGenerator();
     int lineCounter = 1;
-    java.util.UUID invoiceUuid =  java.util.UUID.fromString(String.valueOf(new UUID()));
+    java.util.UUID invoiceUuid =  java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID()));
 
     private final int INVOICE_DATE = 0;
     private final int SUPPLIER_ID = 1;
@@ -66,7 +66,7 @@ public class TransactionLineImport extends Importer
                 // if different, a new invoice number is needed and line counter is reset to 1
                 invoiceNumber = new DbManagerPurchaseLedger().internalTransactionNumberGenerator();
                 lineCounter = 1;
-                invoiceUuid = java.util.UUID.fromString(String.valueOf(new UUID()));
+                invoiceUuid = java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID()));
             }
             else
             {
@@ -191,7 +191,7 @@ public class TransactionLineImport extends Importer
         {
             inventoryItem = new InventoryItem(invoiceNumber, lineCounter, i,
                     purchaseLedgerTransactionLine.getInvoiceUuid(), purchaseLedgerTransactionLine.getLineUuid(),
-                    java.util.UUID.fromString(String.valueOf(new UUID())),
+                    java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
                     purchaseLedgerTransactionLine.getProductKey(), itemCost,
                     purchaseLedgerTransactionLine.getShippedToCountry(),
                     purchaseLedgerTransactionLine.getShippedToChannel(),

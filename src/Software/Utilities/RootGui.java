@@ -47,10 +47,7 @@ public class RootGui extends JFrame
 
         // lambda function to create actionListener
 
-        importProductsButton.addActionListener((ActionEvent importProducts) ->
-        {
-            productImport.importData();
-        });
+        importProductsButton.addActionListener((ActionEvent importProducts) -> productImport.importData());
     }
 
     private void createPurchaseLedgerImportButton()
@@ -59,10 +56,7 @@ public class RootGui extends JFrame
         importPurchaseLedger = new JButton("Import Invoice Product");
 
         // lambda function to create actionListener
-        importPurchaseLedger.addActionListener((ActionEvent importInvoiceLines) ->
-        {
-            transactionLineImport.importData();
-        });
+        importPurchaseLedger.addActionListener((ActionEvent importInvoiceLines) -> transactionLineImport.importData());
     }
 
     private void createSalesLedgerImportButton()
@@ -70,10 +64,7 @@ public class RootGui extends JFrame
         SalesLineImport salesLineImport = new SalesLineImport();
         importSalesLedger = new JButton("Import Sales");
 
-        importSalesLedger.addActionListener((ActionEvent importSales) ->
-        {
-            salesLineImport.importData();
-        });
+        importSalesLedger.addActionListener((ActionEvent importSales) -> salesLineImport.importData());
 
     }
 

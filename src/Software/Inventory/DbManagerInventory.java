@@ -6,6 +6,7 @@ import Software.Enums.Countries;
 import Software.Enums.InventoryItemStatus;
 import Software.Enums.InventoryItemTransactionTypes;
 import Software.Enums.Channels;
+import Software.Utilities.DateConverter;
 import Software.Utilities.Importable;
 
 
@@ -55,20 +56,14 @@ public class DbManagerInventory implements DbManagerInterface
 
             preparedStatement = connection.prepareStatement("INSERT INTO " + finalTableName + "(" +
                     "INTERNAL_INVOICE_REFERENCE_KEY, INTERNAL_INVOICE_REFERENCE_LINE, ITEM_NUMBER, " +
-                    "CONCATENATED_PRIMARY_KEY, INVOICE_UUID, INVOICE_LINE_UUID, PRODUCT_KEY,ROUND (ITEM_COS, 12)," +
+                    "CONCATENATED_PRIMARY_KEY, INVOICE_UUID, INVOICE_LINE_UUID, PRODUCT_KEY,ITEM_COS," +
                     "SINGLE_ITEM_UUID, ITEM_DATE, INVENTORY_ITEM_STATUS, INVENTORY_ITEM_CURRENCY," +
                     "INVENTORY_ITEM_STORE_TIMESTAMP, RETURN_COUNTER, TRANSACTION_TYPE, TRANSACTION_UUID )" +
-                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    " VALUES (?, ?, ?, ?, ?, ?, ?, ROUND(?,12), ?, ?, ?, ?, ?, ?, ?, ?)");
 
-            // needed for converting a string in java date
-            DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-            // Conversion of a string to a java date
-            String dateAsString = inventoryItem.getItemDate();
-            java.util.Date date = sourceFormat.parse(dateAsString);
-
-            // Conversion of a java date to a sql date to store in database
-            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+            DateConverter dateConverter = new DateConverter();
+            java.sql.Date sqlDate = dateConverter.convert(inventoryItem.getItemDate());
 
             preparedStatement.setInt(1, inventoryItem.getInternalInvoiceReference());
             preparedStatement.setInt(2, inventoryItem.getInternalInvoiceReferenceLine());
@@ -91,7 +86,7 @@ public class DbManagerInventory implements DbManagerInterface
             preparedStatement.close();
 
         }
-        catch (ClassNotFoundException | SQLException | ParseException e)
+        catch (ClassNotFoundException | SQLException e)
         {
             e.printStackTrace();
         }
