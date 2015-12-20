@@ -531,12 +531,12 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
 
                 purchaseLedgerTransactionLine.setLineUuid(UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())));
 
-
-
                 persistTransactionLine(purchaseLedgerTransactionLine);
 
-
-                if(purchaseLedgerTransactionLine.getAssociatedTransactionLineReference()==0)
+                //----Inventory COS modifiers
+                // Transactions allocated to transaction group (eg. delivery fees)
+                if(purchaseLedgerTransactionLine.getAssociatedTransactionGroupReference() !=0 &&
+                        purchaseLedgerTransactionLine.getAssociatedTransactionLineReference()==0)
                 {
                     double unitCos = ((purchaseLedgerTransactionLine.getPrice()) /
                             (retrieveTransactionGroupQuantity(purchaseLedgerTransactionLine.
@@ -545,6 +545,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
                     dbManagerInventory.updateTransactionGroupCos(
                             purchaseLedgerTransactionLine.getAssociatedTransactionGroupReference(),unitCos);
                 }
+                // Transactions allocated to transaction line (eg. product fees)
                 else
                 {
                     double unitCos = ((purchaseLedgerTransactionLine.getPrice()) /

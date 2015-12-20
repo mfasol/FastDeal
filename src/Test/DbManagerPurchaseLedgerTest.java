@@ -91,13 +91,14 @@ public class DbManagerPurchaseLedgerTest
     @Test
     public void testRetrieveTransactions() throws Exception
     {
-        dbManagerPurchaseLedger.retrieveTransaction(1);
+        System.out.println(dbManagerPurchaseLedger.retrieveTransaction(5));
     }
 
     @Test
     public void testReverseTransaction() throws Exception
     {
         mockDatabase.reverseTransaction(4);
+        dbManagerPurchaseLedger.reverseTransaction(9);
     }
 
     @Test

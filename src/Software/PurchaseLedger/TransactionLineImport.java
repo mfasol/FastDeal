@@ -93,15 +93,15 @@ public class TransactionLineImport extends Importer
     private void importCosRelevantTransactionLine(CSVRecord csvRecord) //TODO
     {
         int transactionGroupKey = Integer.valueOf(csvRecord.get(ASSOCIATED_TRANSACTION_GROUP_KEY));
-        int transactionLineKey;
+        int transactionLineKey = Integer.valueOf(csvRecord.get(ASSOCIATED_TRANSACTION_LINE_KEY));
         Countries countryFrom;
         Countries countryTo;
         Channels saleChannel;
         String productKey = "";
-        try
-        {
+
             // Check if there is an associated transaction line (on top of the transaction group key)
-            transactionLineKey = Integer.valueOf(csvRecord.get(ASSOCIATED_TRANSACTION_LINE_KEY));
+        if(transactionLineKey != 0)
+        {
             countryFrom = Countries.valueOf(
                     new DbManagerPurchaseLedger().retrieveTransactionLineFromCountry(
                     transactionGroupKey, transactionLineKey));
@@ -113,13 +113,10 @@ public class TransactionLineImport extends Importer
                             transactionGroupKey, transactionLineKey));
             productKey = new DbManagerPurchaseLedger().retrieveProductKey(
                     transactionGroupKey, transactionLineKey);
-
-
         }
-        catch (Exception e) // if error is thrown, associated transaction line is null and the transaction is to split
+        else // if associated transaction line is 0, the transaction is to split
                             // on the overall group of transactions (rather than the specific line)
         {
-            transactionLineKey = 0;
             countryFrom = Countries.valueOf(
                     new DbManagerPurchaseLedger().retrieveTransactionGroupFromCountry(
                             transactionGroupKey));
@@ -130,8 +127,6 @@ public class TransactionLineImport extends Importer
                     new DbManagerPurchaseLedger().retrieveTransactionGroupToChannel(
                             transactionGroupKey));
         }
-
-
 
         purchaseLedgerTransactionLine = new PurchaseLedgerTransactionLine(csvRecord.get(INVOICE_DATE),
                 csvRecord.get(SUPPLIER_ID), csvRecord.get(EXTERNAL_INVOICE_REFERENCE),
@@ -183,6 +178,11 @@ public class TransactionLineImport extends Importer
                 Channels.valueOf(csvRecord.get(SHIPPED_TO_CHANNEL)),
                 invoiceNumber,lineCounter, invoiceUuid, Currencies.valueOf(csvRecord.get(CURRENCY)),
                 PurchaseLedgerTransactionType.valueOf(csvRecord.get(TRANSACTION_TYPE)));
+
+        // stock relevant invoices are associated with themselves
+        purchaseLedgerTransactionLine.setAssociatedTransactionGroupReference(invoiceNumber);
+        purchaseLedgerTransactionLine.setAssociatedTransactionGroupReference(lineCounter);
+
 
         Double itemCost =  Double.valueOf(csvRecord.get(PRICE)) / Integer.valueOf(csvRecord.get(QUANTITY));
 

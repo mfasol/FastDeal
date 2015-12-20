@@ -69,8 +69,8 @@
       <column name="TRANSACTION_TYPE" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="UPDATE_LOCK" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16" def="RkFMU0U="/>
       <column name="INVENTORY_COS_RELEVANT" sqlType="BOOLEAN" precision="1" scale="0" nullable="false" jdbcType="16"/>
-      <column name="TRANSACTION_GROUP_ALLOCATION" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <column name="TRANSACTION_LINE_ALLOCATION" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="TRANSACTION_GROUP_ALLOCATION" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="TRANSACTION_LINE_ALLOCATION" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PURCHASE_LEDGER_INOICE_LINE_UUID_PK" columns="TRANSACTION_LINE_UUID"/>
     </table>
     <table name="SALES_LEDGER" schema="PUBLIC" catalog="FASTDEAL" type="TABLE">
@@ -114,11 +114,22 @@
       <column name="SELLABLE" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
       <column name="CHECK" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
     </table>
+    <table name="V_PURCHASE_LEDGER_INVENTORY_COS_REC" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TOTAL_P_L" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOTAL_INV" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+    </table>
     <table name="V_PURCHASE_LEDGER_PRODUCT_STATUS_PIVOT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="PRODUCT_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="TOTAL" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
       <column name="ACCRUAL" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
       <column name="CHECK" sqlType="BIGINT" precision="10" scale="0" nullable="true" jdbcType="-5"/>
+    </table>
+    <table name="V_PURCHASE_LEDGER_SUMMARY_BY_TRANSACTION_REF" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="DATE" sqlType="DATE" precision="8" scale="0" nullable="true" jdbcType="91"/>
+      <column name="SUPPLIER_KEY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="REFERENCE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="NET" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
     </table>
     <table name="V_REFUND_CHECKER" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="TRANSACTION_DATE" sqlType="DATE" precision="8" scale="0" nullable="true" jdbcType="91"/>
@@ -146,7 +157,43 @@
       <column name="IS_REFUNDED" sqlType="BOOLEAN" precision="1" scale="0" nullable="true" jdbcType="16"/>
       <column name="MERCHANT_CHANNEL_COUNTRY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
     </table>
+    <table name="V_SALES_BY_DAY_DE" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="PRODUCT_KEY" sqlType="DATE" precision="8" scale="0" nullable="true" jdbcType="91"/>
+      <column name="TRANSACTION_NUM" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+      <column name="TOT_TRANSACTIONS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_MER_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_CONT_AFT_MERCH" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_GP" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="AVG_SALE" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="AVG_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="AVG_GP" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+    </table>
+    <table name="V_SALES_BY_DAY_FR" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="PRODUCT_KEY" sqlType="DATE" precision="8" scale="0" nullable="true" jdbcType="91"/>
+      <column name="TRANSACTION_NUM" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+      <column name="TOT_TRANSACTIONS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_MER_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_CONT_AFT_MERCH" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_GP" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="AVG_SALE" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="AVG_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="AVG_GP" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+    </table>
     <table name="V_SALES_BY_DAY_GB" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
+      <column name="PRODUCT_KEY" sqlType="DATE" precision="8" scale="0" nullable="true" jdbcType="91"/>
+      <column name="TRANSACTION_NUM" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+      <column name="TOT_TRANSACTIONS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_MER_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_CONT_AFT_MERCH" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="TOT_GP" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="AVG_SALE" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="AVG_COS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+      <column name="AVG_GP" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
+    </table>
+    <table name="V_SALES_BY_DAY_IT" schema="PUBLIC" catalog="FASTDEAL" type="VIEW">
       <column name="PRODUCT_KEY" sqlType="DATE" precision="8" scale="0" nullable="true" jdbcType="91"/>
       <column name="TRANSACTION_NUM" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
       <column name="TOT_TRANSACTIONS" sqlType="DOUBLE" precision="17" scale="0" nullable="true" jdbcType="8"/>
