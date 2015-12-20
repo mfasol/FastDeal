@@ -98,7 +98,6 @@ public class DbManagerPurchaseLedgerTest
     public void testReverseTransaction() throws Exception
     {
         mockDatabase.reverseTransaction(4);
-        dbManagerPurchaseLedger.reverseTransaction(9);
     }
 
     @Test
