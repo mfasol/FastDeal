@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 public class SalesLedgerLine extends Importable
 {
-    private Map properties = new HashMap();
+    private Map<String, Object> properties = new HashMap<String, Object>();
 
     public SalesLedgerLine(String date, String channelId, String productId, String transactionCity,
                            String transactionPostCode, Countries shipToCountry, int quantity,
@@ -48,7 +48,7 @@ public class SalesLedgerLine extends Importable
         properties.put("merchantChannelCos", merchantChannelCos);
     }
 
-    public Map getProperties()
+    public Map<String, Object> getProperties()
     {
         return properties;
     }

@@ -10,7 +10,5 @@ The System should:
 
 - Calculate cost of sales;
 
-Table Needed:
 
-- Products Table (Product ID, ASIN, EAN, INTRASTAT PURCHASE CODE, INTRASTAT SALE CODE, SKU, PRODUCT DESCRIPTION,
-    Size)
+

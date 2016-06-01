@@ -4,6 +4,7 @@ import Software.Enums.Countries;
 import Software.Enums.Currencies;
 import Software.Enums.PurchaseLedgerTransactionType;
 import Software.Enums.Channels;
+import Software.PurchaseLedger.PurchaseLedgerLine;
 import Software.Utilities.Importable;
 import Software.PurchaseLedger.DbManagerPurchaseLedger;
 import Software.PurchaseLedger.PurchaseLedgerTransactionLine;
@@ -20,11 +21,11 @@ import static org.mockito.Mockito.verify;
  */
 public class DbManagerPurchaseLedgerTest
 {
-    Importable importableTest = new PurchaseLedgerTransactionLine("31/10/2015", "supplierID", "externalAccountingReference",
+    Importable importableTest = new PurchaseLedgerLine("31/10/2015", "supplierID", "externalAccountingReference",
             "description", "productKey", 700, 1.50, 0.3, "vatCode", Countries.IT , Countries.GB,
             Channels.AMAZON, 1, 1,
             java.util.UUID.fromString(String.valueOf(new UUID())),
-            Currencies.GBP, PurchaseLedgerTransactionType.INVOICE);
+            Currencies.GBP, PurchaseLedgerTransactionType.INVOICE,null,null,null);
 
     DbManagerPurchaseLedger mockDatabase = mock(DbManagerPurchaseLedger.class);
     DbManagerPurchaseLedger dbManagerPurchaseLedger = new DbManagerPurchaseLedger();

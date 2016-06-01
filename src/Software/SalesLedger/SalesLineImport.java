@@ -73,7 +73,7 @@ public class SalesLineImport extends Importer
 
         for (int i = 1; i <= productQuantity ; i++)
         {
-            boolean importAllowedFlag = false;
+            boolean importValidatedFlag = false;
 
             String productKey =  csvRecord.get(PRODUCT_KEY);
             String country = csvRecord.get(TRANSACTION_CHANNEL_COUNTRY);
@@ -101,7 +101,7 @@ public class SalesLineImport extends Importer
                     salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.SALE);
                     dbManagerInventory.updateInventoryItemStatus(itemId, itemUUID, InventoryItemStatus.SOLD, country, channel);
 
-                    importAllowedFlag = true;
+                    importValidatedFlag = true;
                 }
                 else if (csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
                 {
@@ -115,7 +115,7 @@ public class SalesLineImport extends Importer
                         salesLedgerLine.setProperty("itemUUID", tempSalesLedgerLine.getProperty("itemUUID"));
                         salesLedgerLine.setProperty("itemId", tempSalesLedgerLine.getProperty("itemId"));
 
-                        importAllowedFlag = true;
+                        importValidatedFlag = true;
                     }
                     catch (NullPointerException npExc)
                     {
@@ -127,7 +127,7 @@ public class SalesLineImport extends Importer
                     System.out.println("ERROR " + csvRecord.toString());
                 }
 
-                if(importAllowedFlag)
+                if(importValidatedFlag)
                 {
                     dbManagerSalesLedger.persistTarget(salesLedgerLine);
                     transactionLineId++;
