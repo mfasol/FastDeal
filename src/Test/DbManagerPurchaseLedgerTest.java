@@ -25,7 +25,7 @@ public class DbManagerPurchaseLedgerTest
             "description", "productKey", 700, 1.50, 0.3, "vatCode", Countries.IT , Countries.GB,
             Channels.AMAZON, 1, 1,
             java.util.UUID.fromString(String.valueOf(new UUID())),
-            Currencies.GBP, PurchaseLedgerTransactionType.INVOICE,null,null,null);
+            Currencies.GBP, PurchaseLedgerTransactionType.INVOICE,null,null,null,null);
 
     DbManagerPurchaseLedger mockDatabase = mock(DbManagerPurchaseLedger.class);
     DbManagerPurchaseLedger dbManagerPurchaseLedger = new DbManagerPurchaseLedger();
@@ -104,20 +104,20 @@ public class DbManagerPurchaseLedgerTest
     @Test
     public void testRetrieveTransactionLine() throws Exception
     {
-        PurchaseLedgerTransactionLine testLine =  dbManagerPurchaseLedger.retrieveTransactionLine(1,1);
-        assert (testLine.getCurrency().equals(Currencies.GBP));
-        assert (testLine.getQuantity()==96);
-        assert (testLine.getPrice()==212.16);
-        assert (testLine.getLineUuid().toString().equals("c8afe020-8e52-11e5-80d9-1211ca9464ab"));
-        assert (testLine.getInvoiceUuid().toString().equals("c8afb910-8e52-11e5-80d9-1211ca9464ab"));
-        assert (testLine.getPurchaseLedgerTransactionType().equals(PurchaseLedgerTransactionType.ACCRUAL));
-        assert (testLine.getShippedFromCountry().equals(Countries.IT));
-        assert (testLine.getShippedToCountry().equals(Countries.GB));
-        assert (testLine.getShippedToChannel().equals(Channels.AMAZON));
-        assert (testLine.getTransactionDate().equals("2015-10-28"));
-        assert (testLine.getSupplierID().equals("AllBrands"));
-        assert (testLine.getDescription().equals("Accrual as invoice has not been received yet"));
-        assert (testLine.getProductKey().equals("Proraso Crema Anti - Irritazione"));
+        PurchaseLedgerLine testLine =  dbManagerPurchaseLedger.retrieveTransactionLine(1,1);
+        assert (testLine.getProperty("currency").equals(Currencies.GBP));
+        assert (Integer.parseInt(testLine.getProperty("quantity").toString())==96);
+        assert (Double.parseDouble(testLine.getProperty("price").toString())==212.16);
+        assert (testLine.getProperty("transactionLineUUID").toString().equals("c8afe020-8e52-11e5-80d9-1211ca9464ab"));
+        assert (testLine.getProperty("invoiceUuid").toString().equals("c8afb910-8e52-11e5-80d9-1211ca9464ab"));
+        assert (testLine.getProperty("purchaseLedgerTransactionType").equals(PurchaseLedgerTransactionType.ACCRUAL));
+        assert (testLine.getProperty("shippedFromCountry").equals(Countries.IT));
+        assert (testLine.getProperty("shippedToCountry").equals(Countries.GB));
+        assert (testLine.getProperty("shippedToChannel").equals(Channels.AMAZON));
+        assert (testLine.getProperty("date").equals("2015-10-28"));
+        assert (testLine.getProperty("supplierID").equals("AllBrands"));
+        assert (testLine.getProperty("description").equals("Accrual as invoice has not been received yet"));
+        assert (testLine.getProperty("productKey").equals("Proraso Crema Anti - Irritazione"));
 
     }
 }

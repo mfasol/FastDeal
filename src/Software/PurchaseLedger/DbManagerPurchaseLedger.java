@@ -6,6 +6,7 @@ import Software.Enums.Countries;
 import Software.Enums.Currencies;
 import Software.Enums.PurchaseLedgerTransactionType;
 import Software.Enums.Channels;
+import Software.Utilities.CheckNull;
 import Software.Utilities.Importable;
 import Software.Inventory.DbManagerInventory;
 
@@ -19,28 +20,32 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
 
+import static com.sun.tools.doclint.Entity.ne;
+
 /**
  * Created by Michele on 03/11/2015.
  */
 public class DbManagerPurchaseLedger implements DbManagerInterface
 {
     ConnectionData connectionData = new ConnectionData();
-    PurchaseLedgerTransactionLine purchaseLedgerTransactionLine;
+    PurchaseLedgerLine purchaseLedgerLine;
     PreparedStatement preparedStatement;
     final String TABLE_NAME = "PURCHASE_LEDGER";
     DbManagerInventory dbManagerInventory = new DbManagerInventory();
 
     private int internalTransactionNumber = 0;
 
+    CheckNull replaceNull = new CheckNull();
 
     @Override
     public void persistTarget(Importable importable)
     {
-        purchaseLedgerTransactionLine = (PurchaseLedgerTransactionLine) importable;
-        persistTransactionLine(purchaseLedgerTransactionLine);
+        purchaseLedgerLine = (PurchaseLedgerLine) importable;
+        System.out.println(purchaseLedgerLine.getProperties().toString());
+        persistTransactionLine(purchaseLedgerLine);
     }
 
-    private void persistTransactionLine(PurchaseLedgerTransactionLine purchaseLedgerTransactionLine)
+    private void persistTransactionLine(PurchaseLedgerLine purchaseLedgerLine)
     {
         try
         {
@@ -60,36 +65,42 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
             DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
 
             // Conversion of a string to a java date
-            String dateAsString = purchaseLedgerTransactionLine.getTransactionDate();
+            String dateAsString = purchaseLedgerLine.getProperty("date").toString();
             Date date = sourceFormat.parse(dateAsString);
 
             // Conversion of a java date to a sql date to store in database
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
             preparedStatement.setDate(1, sqlDate);
-            preparedStatement.setString(2, purchaseLedgerTransactionLine.getExternalAccountingReference());
-            preparedStatement.setString(3, purchaseLedgerTransactionLine.getSupplierID());
-            preparedStatement.setString(4, purchaseLedgerTransactionLine.getDescription());
-            preparedStatement.setString(5, purchaseLedgerTransactionLine.getProductKey());
-            preparedStatement.setInt(6, purchaseLedgerTransactionLine.getQuantity());
-            preparedStatement.setDouble(7, purchaseLedgerTransactionLine.getPrice());
-            preparedStatement.setString(8, purchaseLedgerTransactionLine.getVatCode());
-            preparedStatement.setDouble(9, purchaseLedgerTransactionLine.getVat());
-            preparedStatement.setString(10, String.valueOf(purchaseLedgerTransactionLine.getShippedFromCountry()));
-            preparedStatement.setString(11, String.valueOf(purchaseLedgerTransactionLine.getShippedToCountry()));
-            preparedStatement.setString(12, String.valueOf(purchaseLedgerTransactionLine.getShippedToChannel()));
-            preparedStatement.setString(13, String.valueOf(purchaseLedgerTransactionLine.getLineUuid()));
-            preparedStatement.setBoolean(14, purchaseLedgerTransactionLine.isInventoryRelevant());
-            preparedStatement.setInt(15, purchaseLedgerTransactionLine.getInternalTransactionReference());
-            preparedStatement.setInt(16, purchaseLedgerTransactionLine.getInternalInvoiceLineReference());
-            preparedStatement.setString(17, String.valueOf(purchaseLedgerTransactionLine.getInvoiceUuid()));
-            preparedStatement.setString(18, String.valueOf(purchaseLedgerTransactionLine.getCurrency()));
+            preparedStatement.setString(2, purchaseLedgerLine.getProperty("externalAccountingReference").toString());
+            preparedStatement.setString(3, purchaseLedgerLine.getProperty("supplierID").toString());
+            preparedStatement.setString(4, purchaseLedgerLine.getProperty("description").toString());
+            preparedStatement.setString(5, purchaseLedgerLine.getProperty("productKey").toString());
+            preparedStatement.setInt(6, Integer.parseInt(purchaseLedgerLine.getProperty("quantity").toString()));
+            preparedStatement.setDouble(7, Double.parseDouble(purchaseLedgerLine.getProperty("price").toString()));
+            preparedStatement.setString(8, purchaseLedgerLine.getProperty("vatCode").toString());
+            preparedStatement.setDouble(9, Double.parseDouble(purchaseLedgerLine.getProperty("vat").toString()));
+            preparedStatement.setString(10, String.valueOf(purchaseLedgerLine.getProperty("shippedFromCountry")));
+            preparedStatement.setString(11, String.valueOf(purchaseLedgerLine.getProperty("shippedToCountry")));
+            preparedStatement.setString(12, String.valueOf(purchaseLedgerLine.getProperty("shippedToChannel")));
+            preparedStatement.setString(13, String.valueOf(purchaseLedgerLine.getProperty("transactionLineUUID")));
+            preparedStatement.setBoolean(14, Boolean.parseBoolean(purchaseLedgerLine.
+                    getProperty("inventoryRelevant").toString()));
+            preparedStatement.setInt(15, Integer.parseInt(purchaseLedgerLine.
+                    getProperty("internalInvoiceReference").toString()));
+            preparedStatement.setInt(16, Integer.parseInt(purchaseLedgerLine.
+                    getProperty("internalInvoiceLineReference").toString()));
+            preparedStatement.setString(17, String.valueOf(purchaseLedgerLine.getProperty("invoiceUuid")));
+            preparedStatement.setString(18, String.valueOf(purchaseLedgerLine.getProperty("currency")));
             preparedStatement.setTimestamp(19, java.sql.Timestamp.from(Instant.now()));
-            preparedStatement.setString(20, String.valueOf(purchaseLedgerTransactionLine.
-                    getPurchaseLedgerTransactionType()));
-            preparedStatement.setBoolean(21, purchaseLedgerTransactionLine.isCosRelevant());
-            preparedStatement.setInt(22, purchaseLedgerTransactionLine.getAssociatedTransactionGroupReference());
-            preparedStatement.setInt(23,purchaseLedgerTransactionLine.getAssociatedTransactionLineReference());
+            preparedStatement.setString(20, String.valueOf(purchaseLedgerLine.
+                    getProperty("purchaseLedgerTransactionType")));
+            preparedStatement.setBoolean(21, Boolean.parseBoolean(
+                    purchaseLedgerLine.getProperty("cosRelevant").toString()));
+            preparedStatement.setInt(22, Integer.parseInt(purchaseLedgerLine.
+                    getProperty("associatedTransactionGroupReference").toString()));
+            preparedStatement.setInt(23, Integer.parseInt(purchaseLedgerLine.
+                    getProperty("associatedTransactionLineReference").toString()));
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -102,9 +113,9 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
         }
     }
 
-    public ArrayList<PurchaseLedgerTransactionLine> retrieveTransaction(int internalInvoiceNumber)
+    public ArrayList<PurchaseLedgerLine> retrieveTransaction(int internalInvoiceNumber)
     {
-        ArrayList<PurchaseLedgerTransactionLine> transactionsList = new ArrayList<PurchaseLedgerTransactionLine>();
+        ArrayList<PurchaseLedgerLine> transactionsList = new ArrayList<>();
 
         try
         {
@@ -136,8 +147,8 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
         return transactionsList;
     }
 
-    public PurchaseLedgerTransactionLine retrieveTransactionLine(int internalTransactionReference,
-                                                              int internalTransactionLineReference)
+    public PurchaseLedgerLine retrieveTransactionLine(int internalTransactionReference,
+                                                      int internalTransactionLineReference)
     {
         try
         {
@@ -157,7 +168,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
 
             while (resultSet.next())
             {
-                purchaseLedgerTransactionLine = toPurchaseLedgerTransactionLine(resultSet);
+                purchaseLedgerLine = toPurchaseLedgerTransactionLine(resultSet);
             }
 
         }
@@ -166,7 +177,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
             e.printStackTrace();
         }
 
-        return purchaseLedgerTransactionLine;
+        return purchaseLedgerLine;
     }
 
     public int retrieveTransactionGroupQuantity(int internalInvoiceNumber)
@@ -511,64 +522,73 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
     {
         if(!isLockedForUpdate(internalTransactionNumber))
         {
-            ArrayList<PurchaseLedgerTransactionLine> transactionLines = retrieveTransaction(internalTransactionNumber);
+            ArrayList<PurchaseLedgerLine> transactionLines = retrieveTransaction(internalTransactionNumber);
 
             Iterator transactionLinesIterator = transactionLines.iterator();
             while (transactionLinesIterator.hasNext())
             {
-                purchaseLedgerTransactionLine = (PurchaseLedgerTransactionLine) transactionLinesIterator.next();
+                purchaseLedgerLine = (PurchaseLedgerLine) transactionLinesIterator.next();
 
-                String transactionDate = purchaseLedgerTransactionLine.getTransactionDate();
+                String transactionDate = purchaseLedgerLine.getProperty("date").toString();
                 transactionDate = transactionDate.substring(8, 10) + "/" + transactionDate.substring(5, 7) + "/" +
                         transactionDate.substring(0, 4);
 
-                purchaseLedgerTransactionLine.setTransactionDate(transactionDate);
-                purchaseLedgerTransactionLine.setPurchaseLedgerTransactionType(PurchaseLedgerTransactionType.REVERSAL);
-                purchaseLedgerTransactionLine.setIsInventoryRelevant(false);
-                purchaseLedgerTransactionLine.setPrice(purchaseLedgerTransactionLine.getPrice() * -1);
-                purchaseLedgerTransactionLine.setVat(purchaseLedgerTransactionLine.getVat() * -1);
-                purchaseLedgerTransactionLine.setQuantity(purchaseLedgerTransactionLine.getQuantity() * -1);
+                purchaseLedgerLine.setProperty("date",transactionDate);
+                purchaseLedgerLine.setProperty("purchaseLedgerTransactionType",PurchaseLedgerTransactionType.REVERSAL);
+                purchaseLedgerLine.setProperty("inventoryRelevant",false);
+                purchaseLedgerLine.setProperty("price",Integer.parseInt(
+                        purchaseLedgerLine.getProperty("price").toString()) * -1);
+                purchaseLedgerLine.setProperty("vat",Integer.parseInt(
+                        purchaseLedgerLine.getProperty("vat").toString()) * -1);
+                purchaseLedgerLine.setProperty("quantity",Integer.parseInt(
+                        purchaseLedgerLine.getProperty("quantity").toString()) * -1);
 
-                purchaseLedgerTransactionLine.setLineUuid(UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())));
+                purchaseLedgerLine.setProperty("transactionLineUUID",
+                        UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())));
 
-                persistTransactionLine(purchaseLedgerTransactionLine);
+                persistTransactionLine(purchaseLedgerLine);
 
                 //----Inventory COS modifiers
                 // Transactions allocated to transaction group (eg. delivery fees)
-                if(purchaseLedgerTransactionLine.getAssociatedTransactionGroupReference() !=0 &&
-                        purchaseLedgerTransactionLine.getAssociatedTransactionLineReference()==0)
+                if(Integer.parseInt(purchaseLedgerLine.getProperty(
+                        "associatedTransactionGroupReference").toString()) !=0 &&
+                        Integer.parseInt(purchaseLedgerLine.getProperty(
+                                "associatedTransactionLinReference").toString())==0)
                 {
-                    double unitCos = ((purchaseLedgerTransactionLine.getPrice()) /
-                            (retrieveTransactionGroupQuantity(purchaseLedgerTransactionLine.
-                                    getAssociatedTransactionGroupReference())));
+                    double unitCos =
+                            Double.valueOf(purchaseLedgerLine.getProperty("price").toString()) /
+                            retrieveTransactionGroupQuantity(Integer.valueOf(purchaseLedgerLine.
+                                    getProperty("associatedTransactionGroupReference").toString()));
 
                     dbManagerInventory.updateTransactionGroupCos(
-                            purchaseLedgerTransactionLine.getAssociatedTransactionGroupReference(),unitCos);
+                            Integer.parseInt(purchaseLedgerLine.
+                                    getProperty("associatedTransactionGroupReference").toString()),unitCos);
                 }
                 // Transactions allocated to transaction line (eg. product fees)
                 else
                 {
-                    double unitCos = ((purchaseLedgerTransactionLine.getPrice()) /
-                            (retrieveTransactionLineQuantity(purchaseLedgerTransactionLine.
-                                    getAssociatedTransactionGroupReference(),
-                                    purchaseLedgerTransactionLine.
-                                            getAssociatedTransactionLineReference())));
+                    double unitCos = Double.valueOf(purchaseLedgerLine.getProperty("price").toString()) /
+                            retrieveTransactionLineQuantity(Integer.valueOf(purchaseLedgerLine.
+                                    getProperty("associatedTransactionGroupReference").toString()),
+                                    Integer.parseInt(purchaseLedgerLine.getProperty(
+                                            "associatedTransactionLineReference").toString()));
 
                     dbManagerInventory.updateTransactionLineCos(
-                            purchaseLedgerTransactionLine.getAssociatedTransactionGroupReference(),
-                            purchaseLedgerTransactionLine.getAssociatedTransactionLineReference(),
-                            unitCos);
+                            Integer.valueOf(purchaseLedgerLine.
+                                    getProperty("associatedTransactionGroupReference").toString()),
+                            Integer.valueOf(purchaseLedgerLine.
+                                    getProperty("associatedTransactionLineReference").toString()),unitCos);
                 }
             }
             lockForUpdate(internalTransactionNumber);
         }
     }
 
-    private PurchaseLedgerTransactionLine toPurchaseLedgerTransactionLine(ResultSet resultSet)
+    private PurchaseLedgerLine toPurchaseLedgerTransactionLine(ResultSet resultSet)
     {
         try
         {
-            purchaseLedgerTransactionLine = new PurchaseLedgerTransactionLine(
+            purchaseLedgerLine = new PurchaseLedgerLine(
                     String.valueOf(resultSet.getDate(1)), resultSet.getString(3) , resultSet.getString(2),
                     resultSet.getString(4), resultSet.getString(5), resultSet.getInt(6), resultSet.getDouble(7),
                     resultSet.getDouble(9), resultSet.getString(8),
@@ -576,26 +596,26 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
                     Channels.valueOf((resultSet.getString(12))), resultSet.getInt(15),
                     resultSet.getInt(16), null,
                     Currencies.valueOf(resultSet.getString(18)),
-                PurchaseLedgerTransactionType.valueOf(resultSet.getString(20)));
+                PurchaseLedgerTransactionType.valueOf(resultSet.getString(20)),null,null,null,null);
 
             // cannot be set up in the constructor as the line UUID gets is not a parameter of the constructor
-            purchaseLedgerTransactionLine.setLineUuid(java.util.UUID.fromString(resultSet.getString(13)));
+            purchaseLedgerLine.setProperty("transactionLineUUID",java.util.UUID.fromString(resultSet.getString(13)));
 
             // Values assigned from import process
 
-            purchaseLedgerTransactionLine.setIsInventoryRelevant(resultSet.getBoolean(14));
-            purchaseLedgerTransactionLine.setLineNumber(resultSet.getInt(16));
-            purchaseLedgerTransactionLine.setInvoiceUuid(java.util.UUID.fromString(resultSet.getString(17)));
-            purchaseLedgerTransactionLine.setIsCosRelevant(resultSet.getBoolean(22));
-            purchaseLedgerTransactionLine.setAssociatedTransactionGroupReference(resultSet.getInt(23));
-            purchaseLedgerTransactionLine.setAssociatedTransactionLinReference(resultSet.getInt(24));
+            purchaseLedgerLine.setProperty("inventoryRelevant",resultSet.getBoolean(14));
+            purchaseLedgerLine.setProperty("internalInvoiceReference",resultSet.getInt(16));
+            purchaseLedgerLine.setProperty("invoiceUuid",java.util.UUID.fromString(resultSet.getString(17)));
+            purchaseLedgerLine.setProperty("cosRelevant",resultSet.getBoolean(22));
+            purchaseLedgerLine.setProperty("associatedTransactionGroupReference",resultSet.getInt(23));
+            purchaseLedgerLine.setProperty("associatedTransactionLinReference",resultSet.getInt(24));
 
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
-        return purchaseLedgerTransactionLine;
+        return purchaseLedgerLine;
     }
 
     private boolean isLockedForUpdate(int internalTransactionNumber)
@@ -653,5 +673,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
             }
         }
     }
+
+
 }
 

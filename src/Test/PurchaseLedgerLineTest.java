@@ -25,7 +25,7 @@ public class PurchaseLedgerLineTest
             "description", "productKey", 700, 1.50, 0.3, "vatCode", Countries.IT , Countries.GB,
             Channels.AMAZON, 1, 1,
             java.util.UUID.fromString("c8afe021-8e52-11e5-80d9-1211ca9464ab"),
-            Currencies.GBP, PurchaseLedgerTransactionType.INVOICE,null,null,null);
+            Currencies.GBP, PurchaseLedgerTransactionType.INVOICE,null,null,null,null);
     @Test
     public void getProperties() throws Exception
     {

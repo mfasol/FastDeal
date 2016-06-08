@@ -24,7 +24,7 @@ public class PurchaseLedgerLine extends Importable
                                 Channels shippedToChannel, int internalInvoiceReference,
                                 int internalInvoiceLineReference, UUID invoiceUuid,
                                 Currencies currency,
-                                PurchaseLedgerTransactionType purchaseLedgerTransactionType,
+                                PurchaseLedgerTransactionType purchaseLedgerTransactionType, Boolean inventoryRelevant,
                                 Boolean cosRelevant,
                                 Integer associatedTransactionGroupReference, Integer associatedTransactionLinReference)
     {
@@ -33,6 +33,7 @@ public class PurchaseLedgerLine extends Importable
         properties.put("externalAccountingReference", externalAccountingReference);
         properties.put("description", description);
         properties.put("productKey", productKey);
+        properties.put("quantity", quantity);
         properties.put("price", price);
         properties.put("vat", vat);
         properties.put("vatCode", vatCode);
@@ -45,9 +46,10 @@ public class PurchaseLedgerLine extends Importable
         properties.put("currency", currency);
         properties.put("purchaseLedgerTransactionType", purchaseLedgerTransactionType);
         properties.put("transactionLineUUID", java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())));
+        properties.put("inventoryRelevant",inventoryRelevant);
         properties.put("cosRelevant",cosRelevant);
         properties.put("associatedTransactionGroupReference",associatedTransactionGroupReference);
-        properties.put("associatedTransactionLinReference",associatedTransactionLinReference);
+        properties.put("associatedTransactionLineReference",associatedTransactionLinReference);
     }
 
     public Map<String, Object> getProperties()
@@ -65,6 +67,25 @@ public class PurchaseLedgerLine extends Importable
         properties.replace(property, object);
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        PurchaseLedgerLine that = (PurchaseLedgerLine) o;
+
+        return properties.get("transactionLineUUID").toString().equals(that.getProperty("transactionLineUUID").toString());
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return properties.get("transactionLineUUID").toString().hashCode();
+    }
 }
+
+
+
 
