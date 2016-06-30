@@ -5,16 +5,9 @@ import Software.Enums.Countries;
 import Software.Enums.Currencies;
 import Software.Enums.PurchaseLedgerTransactionType;
 import Software.PurchaseLedger.PurchaseLedgerLine;
-import Software.PurchaseLedger.PurchaseLedgerTransactionLine;
-import Software.Utilities.Importable;
-import com.eaio.uuid.UUID;
-import com.sun.org.apache.xpath.internal.operations.String;
 import org.junit.Test;
-import org.omg.CORBA.Object;
 
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Michele on 31/05/2016.

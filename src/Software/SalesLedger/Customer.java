@@ -5,4 +5,5 @@ package Software.SalesLedger;
  */
 public class Customer
 {
+
 }

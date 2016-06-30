@@ -71,6 +71,7 @@ public class SalesLineImport extends Importer
         Double itemPrice = Double.parseDouble(csvRecord.get(TRANSACTION_PRICE)) / productQuantity;
         Double itemAdditionalCos = Double.parseDouble(csvRecord.get(TRANSACTION_ASSOCIATED_COS)) / productQuantity;
 
+        // generate a new sale for each unit
         for (int i = 1; i <= productQuantity ; i++)
         {
             boolean importValidatedFlag = false;
@@ -80,7 +81,10 @@ public class SalesLineImport extends Importer
             String channel = csvRecord.get(TRANSACTION_CHANNEL);
             String externalId = csvRecord.get(EXTERNAL_ORDER_ID);
 
+            // get saleable item from inventory
             InventoryItem tempItem = dbManagerInventory.getItemForSale(productKey, country, channel);
+
+            // if saleable item exists create new salesLedgerLine object and get some data from the saleable item
             if (tempItem!= null)
             {
                 String itemId = tempItem.getPrimaryKey();
@@ -96,6 +100,9 @@ public class SalesLineImport extends Importer
                         Countries.valueOf(csvRecord.get(MERCHANT_CHANNEL_COUNTRY)),
                         Double.parseDouble(csvRecord.get(MERCHANT_CHANNEL_FEES)));
 
+
+                // if the imported record is an "Order Payment" and the saleable item exists, flag the
+                // salesLedgerLine as of type SALE and flag the relevant stock item as sold
                 if (csvRecord.get(TRANSACTION_TYPE).equals("Order Payment") & (itemId != null))
                 {
                     salesLedgerLine.setProperty("transactionLineStatus", SaleLedgerTransactionType.SALE);
@@ -103,6 +110,8 @@ public class SalesLineImport extends Importer
 
                     importValidatedFlag = true;
                 }
+
+                // if transaction is a refund
                 else if (csvRecord.get(TRANSACTION_TYPE).equals("Refund"))
                 {
                     try

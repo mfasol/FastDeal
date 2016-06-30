@@ -7,7 +7,6 @@ import Software.Enums.Channels;
 import Software.PurchaseLedger.PurchaseLedgerLine;
 import Software.Utilities.Importable;
 import Software.PurchaseLedger.DbManagerPurchaseLedger;
-import Software.PurchaseLedger.PurchaseLedgerTransactionLine;
 import com.eaio.uuid.UUID;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,19 +1,18 @@
 Sales Ledger Requirements
-1 - Register a Sale
-2 - Refund a Sale
-3 - Retrieve a sale
-4 - Reverse a sale
-4 - Signal to the inventory when an item is returned
+1 - Register a Sale;
+2 - Refund a Sale;
+3 - Retrieve a transaction;
+4 - Adjust inventory.
 
 
 Register Sales Use case - Requirement 1
-1 - A customer purchases one or more products from a specific FastDeal inventory.
-2 - Country is identified (export needs to be taken in consideration; amazon UK might sell a product in Malta).
-3 - Sales channel is identified.
-4 - Sales Channel country is identified.
-5 - Specific inventory that provides the item is identified.
-6 - The customer receives the oldest item in inventory of any product purchased.
-    6.1 (OPTIONAL) - the relevant inventory item cost is increased by the additional cost of sale attached to the sale.
+1 - A customer purchases one or more products from a specific FastDeal inventory;
+2 - Country is identified (export needs to be taken in consideration; amazon UK might sell a product in Malta);
+3 - Sales channel is identified;
+4 - Sales Channel country is identified;
+5 - Specific inventory that provides the item is identified;
+6 - The customer receives the oldest item in inventory of any product purchased;
+    6.1 (OPTIONAL) - the relevant inventory item cost is increased by the additional cost of sale attached to the sale;
 7 - Sale line is persisted in the sales database (which, like the purchase ledger, is a global, single
     persistence unit).
 
@@ -22,8 +21,22 @@ Refund Sales Use case - Requirement 2
 1 - A sale is refunded;
 2 - The original sale gets flagged as refunded;
 3 - The refund transaction gets most of the details from the sales transaction it reverses;
-4 - Revenue is the refunded amount; it is negative as it reduces the income for the period.
-    4.1 (OPTIONAL) - If part of the merchant commissions are refunded, it will reduce the COS of the refund line.
-5 - Refund is persisted.
+4 - Revenue is the refunded amount; it is negative as it reduces the income for the period;
+    4.1 (OPTIONAL) - If part of the merchant commissions are refunded to us,
+     it will reduce the COS of the refund line.
+5 - It is assumed that the item is not returned in stock;
+6 - Refund is persisted.
+
+
+Retrieve a transaction - Requirement 3
+1 - search by date;
+2 - search by code;
+3 - search by product.
+
+
+Adjust inventory - requirement 4
+1 - check out items for different reasons (return, item belongs to other product, etc.);
+2 - Check in items for different reasons (eg. returned item, item belongs to other product, etc.).
+
 
 
