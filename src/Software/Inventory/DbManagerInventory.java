@@ -2,10 +2,7 @@ package Software.Inventory;
 
 import DbServer.ConnectionData;
 import DbServer.DbManagerInterface;
-import Software.Enums.Countries;
-import Software.Enums.InventoryItemStatus;
-import Software.Enums.InventoryItemTransactionTypes;
-import Software.Enums.Channels;
+import Software.Enums.*;
 import Software.Utilities.DateConverter;
 import Software.Utilities.Importable;
 
@@ -21,6 +18,7 @@ import Software.PurchaseLedger.DbManagerPurchaseLedger;
 
 import java.util.UUID;
 
+import static java.text.NumberFormat.Field.CURRENCY;
 
 
 /**
@@ -48,7 +46,8 @@ public class DbManagerInventory implements DbManagerInterface
 
     private void persistInventoryItem(InventoryItem inventoryItem)
     {
-        String finalTableName = TABLE_NAME + "_" + inventoryItem.getCountry() + "_" + inventoryItem.getSaleChannel();
+        String finalTableName = TABLE_NAME + "_" + inventoryItem.getProperty("country") + "_" +
+                inventoryItem.getProperty("saleChannel");
         try
         {
             Class.forName(connectionData.getCLASS_FOR_NAME());
@@ -58,29 +57,30 @@ public class DbManagerInventory implements DbManagerInterface
                     "INTERNAL_INVOICE_REFERENCE_KEY, INTERNAL_INVOICE_REFERENCE_LINE, ITEM_NUMBER, " +
                     "CONCATENATED_PRIMARY_KEY, INVOICE_UUID, INVOICE_LINE_UUID, PRODUCT_KEY,ITEM_COS," +
                     "SINGLE_ITEM_UUID, ITEM_DATE, INVENTORY_ITEM_STATUS, INVENTORY_ITEM_CURRENCY," +
-                    "INVENTORY_ITEM_STORE_TIMESTAMP, RETURN_COUNTER, TRANSACTION_TYPE, TRANSACTION_UUID )" +
-                    " VALUES (?, ?, ?, ?, ?, ?, ?, ROUND(?,12), ?, ?, ?, ?, ?, ?, ?, ?)");
+                    "INVENTORY_ITEM_STORE_TIMESTAMP, TRANSACTION_TYPE, TRANSACTION_UUID )" +
+                    " VALUES (?, ?, ?, ?, ?, ?, ?, ROUND(?,12), ?, ?, ?, ?, ?, ?, ?)");
 
 
             DateConverter dateConverter = new DateConverter();
-            java.sql.Date sqlDate = dateConverter.convert(inventoryItem.getItemDate());
+            java.sql.Date sqlDate = dateConverter.convert(inventoryItem.getProperty("itemDate").toString());
 
-            preparedStatement.setInt(1, inventoryItem.getInternalInvoiceReference());
-            preparedStatement.setInt(2, inventoryItem.getInternalInvoiceReferenceLine());
-            preparedStatement.setInt(3, inventoryItem.getItemNumber());
-            preparedStatement.setString(4,inventoryItem.getPrimaryKey());
-            preparedStatement.setString(5, String.valueOf(inventoryItem.getInvoiceUuid()));
-            preparedStatement.setString(6, String.valueOf(inventoryItem.getInvoiceLineUuid()));
-            preparedStatement.setString(7, inventoryItem.getProductKey());
-            preparedStatement.setDouble(8, round(inventoryItem.getItemCost()));
-            preparedStatement.setString(9, String.valueOf(inventoryItem.getItemUuid()));
+            preparedStatement.setInt(1, Integer.parseInt(inventoryItem.
+                    getProperty("internalInvoiceReference").toString()));
+            preparedStatement.setInt(2, Integer.parseInt(inventoryItem.
+                    getProperty("internalInvoiceReferenceLine").toString()));
+            preparedStatement.setInt(3, Integer.parseInt(inventoryItem.getProperty("itemNumber").toString()));
+            preparedStatement.setString(4,inventoryItem.getProperty("primaryKey").toString());
+            preparedStatement.setString(5, String.valueOf(inventoryItem.getProperty("invoiceUuid")));
+            preparedStatement.setString(6, String.valueOf(inventoryItem.getProperty("invoiceLineUuid")));
+            preparedStatement.setString(7, inventoryItem.getProperty("productKey").toString());
+            preparedStatement.setDouble(8, Double.parseDouble(inventoryItem.getProperty("itemCost").toString()));
+            preparedStatement.setString(9, String.valueOf(inventoryItem.getProperty("itemUuid")));
             preparedStatement.setDate(10, sqlDate);
-            preparedStatement.setString(11, String.valueOf(inventoryItem.getInventoryItemStatus()));
-            preparedStatement.setString(12, String.valueOf(inventoryItem.getCurrency()));
+            preparedStatement.setString(11, String.valueOf(inventoryItem.getProperty("itemStatus")));
+            preparedStatement.setString(12, String.valueOf(inventoryItem.getProperty("currency")));
             preparedStatement.setTimestamp(13, java.sql.Timestamp.from(Instant.now()));
-            preparedStatement.setInt(14, inventoryItem.getReturnCounter());
-            preparedStatement.setString(15, String.valueOf(inventoryItem.getInventoryItemTransactionTypes()));
-            preparedStatement.setString(16, String.valueOf(inventoryItem.getItemUuid()));
+            preparedStatement.setString(14, String.valueOf(inventoryItem.getProperty("inventoryItemTransactionTypes")));
+            preparedStatement.setString(15, String.valueOf(inventoryItem.getProperty("itemUuid")));
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -271,9 +271,9 @@ public class DbManagerInventory implements DbManagerInterface
                             invoiceLineNum)),
                     Channels.valueOf(dbManagerPurchaseLedger.retrieveTransactionLineToChannel(invoiceNum,
                             invoiceLineNum)),
+                    Currencies.valueOf(resultSet.getNString("INVENTORY_ITEM_CURRENCY")),
                     resultSet.getString("ITEM_DATE"));
-            inventoryItem.setReturnCounter(resultSet.getInt("RETURN_COUNTER"));
-            inventoryItem.setInventoryItemTransactionTypes(
+            inventoryItem.setProperty("inventoryItemTransactionTypes",
                     InventoryItemTransactionTypes.valueOf(resultSet.getString("TRANSACTION_TYPE")));
         }
         catch (SQLException e)

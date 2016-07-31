@@ -19,7 +19,7 @@ public class SalesLedgerLine extends Importable
 
     public SalesLedgerLine(String date, String channelId, String productId, String transactionCity,
                            String transactionPostCode, Countries shipToCountry, int quantity,
-                           double transactionPrice, double transactionAssociatedCos, Channels transactionChannel,
+                           double transactionPrice, double logisticAssociatedCos, Channels logisticChannel,
                            Countries countryTransactionChannel, Currencies currency, int transactionGroupId,
                            int transactionLineId, SaleLedgerTransactionType transactionLineStatus, String itemId,
                            UUID itemUUID, Channels merchantChannel, Countries merchantChannelCountry,
@@ -33,8 +33,8 @@ public class SalesLedgerLine extends Importable
         properties.put("shipToCountry", shipToCountry);
         properties.put("quantity", quantity);
         properties.put("transactionPrice", transactionPrice);
-        properties.put("logisticAssociatedCos", transactionAssociatedCos);
-        properties.put("logisticChannel", transactionChannel);
+        properties.put("logisticAssociatedCos", logisticAssociatedCos);
+        properties.put("logisticChannel", logisticChannel);
         properties.put("countryLogisticChannel",countryTransactionChannel);
         properties.put("currency", currency);
         properties.put("transactionGroupId", transactionGroupId);

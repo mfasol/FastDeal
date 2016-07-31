@@ -9,8 +9,8 @@ public enum SaleLedgerTransactionType
     REVERSAL,
     REFUND,
     JOURNAL,
-    BLANK
-    ;
+    BLANK,
+    ADJUSTMENT;
 
     public static boolean contains(String purchaseLedgerTransactionType)
     {

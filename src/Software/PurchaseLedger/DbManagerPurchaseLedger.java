@@ -191,7 +191,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
 
             preparedStatement = connection.prepareStatement("SELECT SUM (QUANTITY) AS " + "TOTAL_QUANTITY" +
                     " FROM " + TABLE_NAME + " WHERE INTERNAL_TRANSACTION_REFERENCE_KEY = (?) AND " +
-                    "TRANSACTION_TYPE <> (?)");
+                    "TRANSACTION_TYPE <> (?) AND INVENTORY_RELEVANT = TRUE");
 
             preparedStatement.setInt(1, internalInvoiceNumber);
             preparedStatement.setString(2 ,String.valueOf(PurchaseLedgerTransactionType.REVERSAL));
@@ -228,7 +228,7 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
             preparedStatement = connection.prepareStatement("SELECT SUM (QUANTITY) AS " + "TOTAL_QUANTITY" +
                     " FROM " + TABLE_NAME + " WHERE INTERNAL_TRANSACTION_REFERENCE_KEY = (?) AND " +
                     "INTERNAL_TRANSACTION_REFERENCE_LINE = (?) AND " +
-                    "TRANSACTION_TYPE <> (?)");
+                    "TRANSACTION_TYPE <> (?) AND INVENTORY_RELEVANT = TRUE");
 
             preparedStatement.setInt(1, internInvoiceNumber);
             preparedStatement.setInt(2, internalInvoiceLineNumber);

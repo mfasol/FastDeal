@@ -1,8 +1,7 @@
 package Software.Utilities;
 
 import Software.Products.ProductImport;
-import Software.Products.DbManagerProducts;
-import Software.PurchaseLedger.TransactionLineImport;
+import Software.PurchaseLedger.PurchaseLedgerImport;
 import Software.SalesLedger.SalesLineImport;
 
 import javax.swing.*;
@@ -52,11 +51,11 @@ public class RootGui extends JFrame
 
     private void createPurchaseLedgerImportButton()
     {
-        TransactionLineImport transactionLineImport = new TransactionLineImport();
+        PurchaseLedgerImport purchaseLedgerImport = new PurchaseLedgerImport();
         importPurchaseLedger = new JButton("Import Invoice Product");
 
         // lambda function to create actionListener
-        importPurchaseLedger.addActionListener((ActionEvent importInvoiceLines) -> transactionLineImport.importData());
+        importPurchaseLedger.addActionListener((ActionEvent importInvoiceLines) -> purchaseLedgerImport.importData());
     }
 
     private void createSalesLedgerImportButton()

@@ -2,8 +2,11 @@ package Software.Inventory;
 
 
 import Software.Enums.*;
+import Software.PurchaseLedger.PurchaseLedgerLine;
 import Software.Utilities.Importable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -14,207 +17,43 @@ import java.util.UUID;
  */
 public class InventoryItem extends Importable
 {
-    private int internalInvoiceReference;
-    private int internalInvoiceReferenceLine;
-    private int itemNumber;
-    private String primaryKey;
-    private UUID invoiceUuid;
-    private UUID invoiceLineUuid;
-    private UUID itemUuid;
-    private String productKey;
-    private double itemCost;
-    private Countries country;
-    private Channels saleChannel;
-    private String itemDate;
-    private InventoryItemStatus inventoryItemStatus;
-    private Currencies currency;
-    private int returnCounter;
-    private InventoryItemTransactionTypes inventoryItemTransactionTypes;
+    private Map<String, Object> properties = new HashMap<String, Object>();
 
     public InventoryItem(int internalInvoiceReference, int internalInvoiceReferenceLine, int itemNumber,
                          UUID invoiceUuid, UUID invoiceLineUuid, UUID itemUuid, String sellerSku,
-                         double itemCost, Countries country, Channels saleChannel, String itemDate)
+                         double itemCost, Countries country, Channels saleChannel,Currencies currency, String itemDate)
     {
-        this.internalInvoiceReference = internalInvoiceReference;
-        this.internalInvoiceReferenceLine = internalInvoiceReferenceLine;
-        this.itemNumber = itemNumber;
-        this.invoiceUuid = invoiceUuid;
-        this.invoiceLineUuid = invoiceLineUuid;
-        this.itemUuid = itemUuid;
-        this.productKey = sellerSku;
-        this.itemCost = itemCost;
-        this.country = country;
-        this.saleChannel = saleChannel;
-        this.itemDate = itemDate;
-        returnCounter = 0;
-        inventoryItemTransactionTypes = InventoryItemTransactionTypes.PURCHASE;
-        this.primaryKey = internalInvoiceReference+"-"+internalInvoiceReferenceLine+"-"+itemNumber+"-"+returnCounter;
+        properties.put("internalInvoiceReference" ,internalInvoiceReference);
+        properties.put("internalInvoiceReferenceLine", internalInvoiceReferenceLine);
+        properties.put("itemNumber", itemNumber);
+        properties.put("invoiceUuid", invoiceUuid);
+        properties.put("invoiceLineUuid",invoiceLineUuid);
+        properties.put("itemUuid", itemUuid);
+        properties.put("productKey", sellerSku);
+        properties.put("itemCost", itemCost);
+        properties.put("country", country);
+        properties.put("saleChannel", saleChannel);
+        properties.put("itemDate", itemDate);
+        properties.put("inventoryItemTransactionTypes", InventoryItemTransactionTypes.PURCHASE);
+        properties.put("primaryKey", internalInvoiceReference+"-"+internalInvoiceReferenceLine+"-"+itemNumber);
+        properties.put("currency", currency);
+        properties.put("itemDate", itemDate);
+        properties.put("itemStatus", InventoryItemStatus.AVAILABLE_FOR_SALE);
     }
 
-    public int getInternalInvoiceReference()
+    public Map<String, Object> getProperties()
     {
-        return internalInvoiceReference;
+        return properties;
     }
 
-    public void setInternalInvoiceReference(int internalInvoiceReference)
+    public Object getProperty(String property)
     {
-        this.internalInvoiceReference = internalInvoiceReference;
+        return properties.get(property);
     }
 
-    public int getInternalInvoiceReferenceLine()
+    public void setProperty(String property, Object object)
     {
-        return internalInvoiceReferenceLine;
-    }
-
-    public void setInternalInvoiceReferenceLine(int internalInvoiceReferenceLine)
-    {
-        this.internalInvoiceReferenceLine = internalInvoiceReferenceLine;
-    }
-
-    public int getItemNumber()
-    {
-        return itemNumber;
-    }
-
-    public void setItemNumber(int itemNumber)
-    {
-        this.itemNumber = itemNumber;
-    }
-
-    public String getPrimaryKey()
-    {
-        return primaryKey;
-    }
-
-    public void setPrimaryKey(String primaryKey)
-    {
-        this.primaryKey = primaryKey;
-    }
-
-    public UUID getInvoiceUuid()
-    {
-        return invoiceUuid;
-    }
-
-    public void setInvoiceUuid(UUID invoiceUuid)
-    {
-        this.invoiceUuid = invoiceUuid;
-    }
-
-    public UUID getInvoiceLineUuid()
-    {
-        return invoiceLineUuid;
-    }
-
-    public void setInvoiceLineUuid(UUID invoiceLineUuid)
-    {
-        this.invoiceLineUuid = invoiceLineUuid;
-    }
-
-    public UUID getItemUuid()
-    {
-        return itemUuid;
-    }
-
-    public void setItemUuid(UUID itemUuid)
-    {
-        this.itemUuid = itemUuid;
-    }
-
-    public String getProductKey()
-    {
-        return productKey;
-    }
-
-    public void setProductKey(String productKey)
-    {
-        this.productKey = productKey;
-    }
-
-    public double getItemCost()
-    {
-        return itemCost;
-    }
-
-    public void setItemCost(double itemCost)
-    {
-        this.itemCost = itemCost;
-    }
-
-    public Channels getSaleChannel()
-    {
-        return saleChannel;
-    }
-
-    public void setSaleChannel(Channels saleChannel)
-    {
-        this.saleChannel = saleChannel;
-    }
-
-    public Countries getCountry()
-    {
-        return country;
-    }
-
-    public void setCountry(Countries country)
-    {
-        this.country = country;
-    }
-
-    public String getItemDate()
-    {
-        return itemDate;
-    }
-
-    public void setItemDate(String itemDate)
-    {
-        this.itemDate = itemDate;
-    }
-
-    public InventoryItemStatus getInventoryItemStatus()
-    {
-        return inventoryItemStatus;
-    }
-
-    public void setInventoryItemStatus(InventoryItemStatus inventoryItemStatus)
-    {
-        this.inventoryItemStatus = inventoryItemStatus;
-    }
-
-    public Currencies getCurrency()
-    {
-        return currency;
-    }
-
-    public void setCurrency(Currencies currency)
-    {
-        this.currency = currency;
-    }
-
-    public int getReturnCounter()
-    {
-        return returnCounter;
-    }
-
-    public void setReturnCounter(int returnCounter)
-    {
-        this.returnCounter = returnCounter;
-    }
-
-    public InventoryItemTransactionTypes getInventoryItemTransactionTypes()
-    {
-        return inventoryItemTransactionTypes;
-    }
-
-    public void setInventoryItemTransactionTypes(InventoryItemTransactionTypes inventoryItemTransactionTypes)
-    {
-        this.inventoryItemTransactionTypes = inventoryItemTransactionTypes;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return itemUuid.hashCode();
+        properties.replace(property, object);
     }
 
     @Override
@@ -222,22 +61,17 @@ public class InventoryItem extends Importable
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         InventoryItem that = (InventoryItem) o;
 
-        return itemUuid.equals(that.itemUuid);
+        return properties.get("itemUuid").toString().equals(that.getProperty("itemUuid").toString());
+
     }
 
     @Override
-    public String toString()
+    public int hashCode()
     {
-        return "InventoryItem{" +
-                "itemCost=" + itemCost +
-                ", productKey=" + productKey +
-                ", internalInvoiceReference=" + internalInvoiceReference +
-                ", internalInvoiceReferenceLine=" + internalInvoiceReferenceLine +
-                ", itemNumber=" + itemNumber +
-                ", primaryKey=" + primaryKey +
-                ", itemUuid=" + itemUuid +
-                '}';
+        return properties.get("itemUuid").toString().hashCode();
     }
+
 }

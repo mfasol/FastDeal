@@ -5,10 +5,7 @@ import Software.Enums.*;
 import Software.Utilities.Importer;
 import Software.Inventory.DbManagerInventory;
 import Software.Inventory.InventoryItem;
-import com.eaio.uuid.UUID;
 import org.apache.commons.csv.CSVRecord;
-
-import javax.sound.sampled.Line;
 
 
 /**
@@ -16,20 +13,20 @@ import javax.sound.sampled.Line;
  *
  *
  */
-public class TransactionLineImport extends Importer
+public class PurchaseLedgerImport extends Importer
 {
-    DbManagerInterface dbManagerPurchaseLedger = new DbManagerPurchaseLedger();
-    DbManagerInterface dbManagerInventoryItems = new DbManagerInventory();
+    private DbManagerInterface dbManagerPurchaseLedger = new DbManagerPurchaseLedger();
+    private DbManagerInterface dbManagerInventoryItems = new DbManagerInventory();
 
-    PurchaseLedgerLine purchaseLedgerLine;
-    InventoryItem inventoryItem;
+    private PurchaseLedgerLine purchaseLedgerLine;
+    private InventoryItem inventoryItem;
 
-    String referenceChecker = "";
+    private String referenceChecker = "";
 
 
-    int invoiceNumber = new DbManagerPurchaseLedger().internalTransactionNumberGenerator();
-    int lineCounter = 1;
-    java.util.UUID invoiceUuid =  java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID()));
+    private int invoiceNumber = new DbManagerPurchaseLedger().internalTransactionNumberGenerator();
+    private int lineCounter = 1;
+    private java.util.UUID invoiceUuid =  java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID()));
 
     private final int INVOICE_DATE = 0;
     private final int SUPPLIER_ID = 1;
@@ -74,23 +71,81 @@ public class TransactionLineImport extends Importer
                 lineCounter++;
             }
 
-            if (csvRecord.get(INVENTORY_RELEVANT).equals("TRUE"))
+            // check if the transaction is increase in liability (eg. invoice)
+            if(Double.parseDouble(csvRecord.get(PRICE))<0)
             {
-                importStockRelevantInvoiceLine(csvRecord);
+                if (csvRecord.get(INVENTORY_RELEVANT).equals("YES"))
+                {
+                    importNegativeStockLine(csvRecord);
+                }
+                else if (csvRecord.get(COS_RELEVANT).equals("YES"))
+                {
+                    importCosLine(csvRecord,csvRecord.get(TRANSACTION_TYPE));
+                }
+                else
+                {
+                    importOverheadLine(csvRecord);
+                }
+                referenceChecker = currentReference;
             }
-            else if (csvRecord.get(COS_RELEVANT).equals("TRUE"))
-            {
-                importCosRelevantTransactionLine(csvRecord);
-            }
+            // transaction is decrease in liability (eg. credit note)
             else
             {
-                importNonStockRelevantInvoiceLine(csvRecord);
+                if (csvRecord.get(COS_RELEVANT).equals("YES"))
+                {
+                    importCosLine(csvRecord,csvRecord.get(TRANSACTION_TYPE));
+                }
+                else
+                {
+                    importOverheadLine(csvRecord);
+                }
+
             }
-            referenceChecker = currentReference;
         }
     }
 
-    private void importCosRelevantTransactionLine(CSVRecord csvRecord)
+    private void importNegativeStockLine(CSVRecord csvRecord)
+    {
+        purchaseLedgerLine = new PurchaseLedgerLine(csvRecord.get(INVOICE_DATE),
+                csvRecord.get(SUPPLIER_ID), csvRecord.get(EXTERNAL_INVOICE_REFERENCE),
+                csvRecord.get(DESCRIPTION), csvRecord.get(PRODUCT_KEY),
+                Integer.valueOf(csvRecord.get(QUANTITY)), Double.valueOf(csvRecord.get(PRICE)),
+                Double.valueOf(csvRecord.get(VAT)), csvRecord.get(VAT_CODE),
+                Countries.valueOf(csvRecord.get(SHIPPED_FROM_COUNTRY)),
+                Countries.valueOf(csvRecord.get(SHIPPED_TO_COUNTRY)),
+                Channels.valueOf(csvRecord.get(SHIPPED_TO_CHANNEL)),
+                invoiceNumber,lineCounter, invoiceUuid, Currencies.valueOf(csvRecord.get(CURRENCY)),
+                PurchaseLedgerTransactionType.valueOf(csvRecord.get(TRANSACTION_TYPE)),true,false,null,null);
+
+        // stock relevant invoices are associated with themselves
+        purchaseLedgerLine.setProperty("associatedTransactionGroupReference",(invoiceNumber));
+        purchaseLedgerLine.setProperty("associatedTransactionLineReference",(lineCounter));
+
+
+        Double itemCost =  Double.valueOf(csvRecord.get(PRICE)) / Integer.valueOf(csvRecord.get(QUANTITY));
+
+        // persist inventory items
+        for (int i = 1; i <= Integer.valueOf(csvRecord.get(QUANTITY)); i++)
+        {
+            inventoryItem = new InventoryItem(invoiceNumber, lineCounter, i,
+                    java.util.UUID.fromString(String.valueOf(purchaseLedgerLine.getProperty("invoiceUuid"))),
+                    java.util.UUID.fromString(String.valueOf(purchaseLedgerLine.getProperty("transactionLineUUID"))),
+                    java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
+                    purchaseLedgerLine.getProperty("productKey").toString(), itemCost,
+                    Countries.valueOf(purchaseLedgerLine.getProperty("shippedToCountry").toString()),
+                    Channels.valueOf(purchaseLedgerLine.getProperty("shippedToChannel").toString()),
+                    Currencies.valueOf(purchaseLedgerLine.getProperty("currency").toString()),
+                    purchaseLedgerLine.getProperty("date").toString());
+
+            inventoryItem.setProperty("itemStatus",InventoryItemStatus.AVAILABLE_FOR_SALE.toString());
+            inventoryItem.setProperty("currency",Currencies.valueOf(purchaseLedgerLine.getProperty("currency").toString()));
+
+            dbManagerInventoryItems.persistTarget(inventoryItem);
+        }
+        dbManagerPurchaseLedger.persistTarget(purchaseLedgerLine);
+    }
+
+    private void importCosLine(CSVRecord csvRecord, String transactionType)
     {
         int transactionGroupKey = Integer.valueOf(csvRecord.get(ASSOCIATED_TRANSACTION_GROUP_KEY));
         int transactionLineKey = Integer.valueOf(csvRecord.get(ASSOCIATED_TRANSACTION_LINE_KEY));
@@ -130,6 +185,28 @@ public class TransactionLineImport extends Importer
 
         System.out.println(countryFrom + " " + transactionGroupKey);
 
+        // update inventory items COS section
+        double cos = Double.parseDouble(csvRecord.get(PRICE));
+        double cosPerUnit;
+        int quantity;
+
+        // update inventory items COS for overall batch purchase (eg. delivery cost)
+        if(transactionLineKey == 0)
+        {
+            quantity = new DbManagerPurchaseLedger().retrieveTransactionGroupQuantity(transactionGroupKey);
+            cosPerUnit = (cos / quantity);
+            new DbManagerInventory().updateTransactionGroupCos(transactionGroupKey, cosPerUnit);
+        }
+
+        // update inventory items COS for specific items (eg. labelling cost only needed for a specific product)
+        else
+        {
+            quantity = new DbManagerPurchaseLedger().retrieveTransactionLineQuantity(transactionGroupKey,
+                    transactionLineKey);
+            cosPerUnit = (cos / quantity);
+            new DbManagerInventory().updateTransactionLineCos(transactionGroupKey, transactionLineKey,
+                    cosPerUnit);
+        }
 
         purchaseLedgerLine = new PurchaseLedgerLine(csvRecord.get(INVOICE_DATE),
                 csvRecord.get(SUPPLIER_ID), csvRecord.get(EXTERNAL_INVOICE_REFERENCE),
@@ -138,7 +215,7 @@ public class TransactionLineImport extends Importer
                 Double.valueOf(csvRecord.get(PRICE)), Double.valueOf(csvRecord.get(VAT)),
                 csvRecord.get(VAT_CODE),null,null,null,invoiceNumber,lineCounter, invoiceUuid,
                 Currencies.valueOf(csvRecord.get(CURRENCY)),
-                PurchaseLedgerTransactionType.valueOf(csvRecord.get(TRANSACTION_TYPE)),
+                PurchaseLedgerTransactionType.valueOf(transactionType),
                 false,true, transactionGroupKey, transactionLineKey);
 
         purchaseLedgerLine.setProperty("shippedFromCountry",(countryFrom));
@@ -148,68 +225,9 @@ public class TransactionLineImport extends Importer
 
         dbManagerPurchaseLedger.persistTarget(purchaseLedgerLine);
 
-        double cos = Double.parseDouble(csvRecord.get(PRICE));
-        double cosPerUnit;
-        int quantity;
-
-        if(transactionLineKey == 0)
-        {
-            quantity = new DbManagerPurchaseLedger().retrieveTransactionGroupQuantity(transactionGroupKey);
-            cosPerUnit = cos / quantity;
-            new DbManagerInventory().updateTransactionGroupCos(transactionGroupKey, cosPerUnit);
-        }
-
-        else
-        {
-            quantity = new DbManagerPurchaseLedger().retrieveTransactionLineQuantity(transactionGroupKey,
-                    transactionLineKey);
-            cosPerUnit = cos / quantity;
-            new DbManagerInventory().updateTransactionLineCos(transactionGroupKey, transactionLineKey,
-                    cosPerUnit);
-        }
     }
 
-    private void importStockRelevantInvoiceLine(CSVRecord csvRecord)
-    {
-        purchaseLedgerLine = new PurchaseLedgerLine(csvRecord.get(INVOICE_DATE),
-                csvRecord.get(SUPPLIER_ID), csvRecord.get(EXTERNAL_INVOICE_REFERENCE),
-                csvRecord.get(DESCRIPTION), csvRecord.get(PRODUCT_KEY),
-                Integer.valueOf(csvRecord.get(QUANTITY)), Double.valueOf(csvRecord.get(PRICE)),
-                Double.valueOf(csvRecord.get(VAT)), csvRecord.get(VAT_CODE),
-                Countries.valueOf(csvRecord.get(SHIPPED_FROM_COUNTRY)),
-                Countries.valueOf(csvRecord.get(SHIPPED_TO_COUNTRY)),
-                Channels.valueOf(csvRecord.get(SHIPPED_TO_CHANNEL)),
-                invoiceNumber,lineCounter, invoiceUuid, Currencies.valueOf(csvRecord.get(CURRENCY)),
-                PurchaseLedgerTransactionType.valueOf(csvRecord.get(TRANSACTION_TYPE)),true,false,null,null);
-
-        // stock relevant invoices are associated with themselves
-        purchaseLedgerLine.setProperty("associatedTransactionGroupReference",(invoiceNumber));
-        purchaseLedgerLine.setProperty("associatedTransactionLineReference",(lineCounter));
-
-
-        Double itemCost =  Double.valueOf(csvRecord.get(PRICE)) / Integer.valueOf(csvRecord.get(QUANTITY));
-
-        // persist inventory items
-        for (int i = 1; i <= Integer.valueOf(csvRecord.get(QUANTITY)); i++)
-        {
-            inventoryItem = new InventoryItem(invoiceNumber, lineCounter, i,
-                    java.util.UUID.fromString(String.valueOf(purchaseLedgerLine.getProperty("invoiceUuid"))),
-                    java.util.UUID.fromString(String.valueOf(purchaseLedgerLine.getProperty("transactionLineUUID"))),
-                    java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
-                    purchaseLedgerLine.getProperty("productKey").toString(), itemCost,
-                    Countries.valueOf(purchaseLedgerLine.getProperty("shippedToCountry").toString()),
-                    Channels.valueOf(purchaseLedgerLine.getProperty("shippedToChannel").toString()),
-                    purchaseLedgerLine.getProperty("date").toString());
-
-            inventoryItem.setInventoryItemStatus(InventoryItemStatus.AVAILABLE_FOR_SALE);
-            inventoryItem.setCurrency(Currencies.valueOf(purchaseLedgerLine.getProperty("currency").toString()));
-
-            dbManagerInventoryItems.persistTarget(inventoryItem);
-        }
-        dbManagerPurchaseLedger.persistTarget(purchaseLedgerLine);
-    }
-
-    private void importNonStockRelevantInvoiceLine(CSVRecord csvRecord)
+    private void importOverheadLine(CSVRecord csvRecord)
     {
         int quantity = (csvRecord.get(QUANTITY).isEmpty() ? 1 : Integer.valueOf(csvRecord.get(QUANTITY)));
         purchaseLedgerLine = new PurchaseLedgerLine(csvRecord.get(INVOICE_DATE),

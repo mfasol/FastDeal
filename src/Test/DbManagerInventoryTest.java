@@ -1,6 +1,7 @@
 package Test;
 
 import Software.Enums.Countries;
+import Software.Enums.Currencies;
 import Software.Enums.InventoryItemStatus;
 import Software.Enums.Channels;
 import Software.Utilities.Importable;
@@ -23,7 +24,7 @@ public class DbManagerInventoryTest
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
             java.util.UUID.fromString(String.valueOf(new com.eaio.uuid.UUID())),
-            null ,5.00, Countries.GB, Channels.AMAZON, "31/10/2015");
+            null ,5.00, Countries.GB, Channels.AMAZON, Currencies.EUR,"31/10/2015");
 
     DbManagerInventory mockDatabase = mock(DbManagerInventory.class);
     DbManagerInventory dbManagerInventory = new DbManagerInventory();
@@ -84,10 +85,17 @@ public class DbManagerInventoryTest
     @Test
     public void testGetItemForSale() throws Exception
     {
-        InventoryItem inventoryItem = dbManagerInventory.getItemForSale(
-                "Proraso Sapone Tubo Rinfrescante","GB","AMAZON");
+        try
+        {
+            InventoryItem inventoryItem = dbManagerInventory.getItemForSale(
+                    "Proraso Sapone Tubo Rinfrescante", "GB", "AMAZON");
 
-        System.out.println(inventoryItem.toString());
+            System.out.println(inventoryItem.toString());
+        }
+        catch (NullPointerException npe)
+        {
+
+        }
     }
 
     @Test
