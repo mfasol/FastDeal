@@ -90,7 +90,7 @@ public class DbManagerInventoryTest
             InventoryItem inventoryItem = dbManagerInventory.getItemForSale(
                     "Proraso Sapone Tubo Rinfrescante", "GB", "AMAZON");
 
-            System.out.println(inventoryItem.toString());
+            System.out.println(inventoryItem.getProperties().toString());
         }
         catch (NullPointerException npe)
         {
@@ -102,10 +102,11 @@ public class DbManagerInventoryTest
     public void testUpdateInventoryItemStatus() throws Exception
     {
         mockDatabase.updateInventoryItemStatus("1-1-1", UUID.fromString("c8afe021-8e52-11e5-80d9-1211ca9464ab"),
-                InventoryItemStatus.SOLD, "GB", "AMAZON");
+                InventoryItemStatus.SOLD, "GB", "AMAZON", "01/01/2017");
 
         verify(mockDatabase, times(1)).updateInventoryItemStatus("1-1-1",
-                UUID.fromString("c8afe021-8e52-11e5-80d9-1211ca9464ab"), InventoryItemStatus.SOLD, "GB", "AMAZON");
+                UUID.fromString("c8afe021-8e52-11e5-80d9-1211ca9464ab"), InventoryItemStatus.SOLD, "GB",
+                "AMAZON", "01/01/2017");
 
     }
 }

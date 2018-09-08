@@ -1,2 +1,16 @@
 # Created by .ignore support plugin (hsz.mobi)
 /*.db
+/src/DbBackups/Archive/
+.idea/dataSources.corrupted.20151203-094230.ids
+.idea/dataSources.corrupted.20160713-102102.ids
+.idea/dataSources.corrupted.20160718-032306.ids
+.idea/dataSources.corrupted.20160731-111123.ids
+.idea/dataSources.local.xml
+.idea/dataSources/3f6eec5e-abae-4e5b-90cb-c5e40aa8a176.xml
+.idea/dataSources/3f6eec5e-abae-4e5b-90cb-c5e40aa8a176/_metadata_/
+.idea/dataSources/3f6eec5e-abae-4e5b-90cb-c5e40aa8a176/_src_/
+.idea/dataSources/3f6eec5e-abae-4e5b-90cb-c5e40aa8a176/storage.xml
+.idea/sqldialects.xml
+.idea/workspace.xml
+FastDeal.trace.db.old
+out/

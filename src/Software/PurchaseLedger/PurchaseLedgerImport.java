@@ -7,7 +7,6 @@ import Software.Inventory.DbManagerInventory;
 import Software.Inventory.InventoryItem;
 import org.apache.commons.csv.CSVRecord;
 
-
 /**
  * Created by Michele on 08/11/2015.
  *
@@ -16,7 +15,7 @@ import org.apache.commons.csv.CSVRecord;
 public class PurchaseLedgerImport extends Importer
 {
     private DbManagerInterface dbManagerPurchaseLedger = new DbManagerPurchaseLedger();
-    private DbManagerInterface dbManagerInventoryItems = new DbManagerInventory();
+    private DbManagerInventory dbManagerInventoryItems = new DbManagerInventory();
 
     private PurchaseLedgerLine purchaseLedgerLine;
     private InventoryItem inventoryItem;
@@ -50,7 +49,6 @@ public class PurchaseLedgerImport extends Importer
     @Override
     public void completeImportProcess()
     {
-
         for (CSVRecord csvRecord : super.csvLines)
         {
             System.out.println(csvRecord.toString());
@@ -80,7 +78,7 @@ public class PurchaseLedgerImport extends Importer
                 }
                 else if (csvRecord.get(COS_RELEVANT).equals("YES"))
                 {
-                    importCosLine(csvRecord,csvRecord.get(TRANSACTION_TYPE));
+                    importPositiveCosLine(csvRecord,csvRecord.get(TRANSACTION_TYPE));
                 }
                 else
                 {
@@ -93,14 +91,39 @@ public class PurchaseLedgerImport extends Importer
             {
                 if (csvRecord.get(COS_RELEVANT).equals("YES"))
                 {
-                    importCosLine(csvRecord,csvRecord.get(TRANSACTION_TYPE));
+                    importPositiveCosLine(csvRecord,csvRecord.get(TRANSACTION_TYPE));
                 }
+                else if(csvRecord.get(TRANSACTION_TYPE).equals(InventoryItemStatus.ADJUSTMENT_WRITE_OFF)) 
+                {
+                    importWriteOff(csvRecord);
+                }
+                else if(csvRecord.get(TRANSACTION_TYPE).equals(InventoryItemStatus.TRANSFER))
+                {
+                    importTransferInventoryItem(csvRecord);
+                }   
                 else
                 {
                     importOverheadLine(csvRecord);
                 }
 
             }
+        }
+    }
+
+    private void importTransferInventoryItem(CSVRecord csvRecord)
+    {
+        for (int i = 1; i <= Integer.valueOf(csvRecord.get(QUANTITY)) ; i++)
+        {
+
+        }
+    }
+
+    private void importWriteOff(CSVRecord csvRecord)
+    {
+        for (int i = 1; i <= Integer.valueOf(csvRecord.get(QUANTITY)); i++)
+        {
+            dbManagerInventoryItems.adjustWriteOffItem(csvRecord.get(PRODUCT_KEY), csvRecord.get(SHIPPED_TO_CHANNEL),
+                    csvRecord.get(INVOICE_DATE), Countries.valueOf(csvRecord.get(SHIPPED_TO_COUNTRY)));
         }
     }
 
@@ -115,7 +138,8 @@ public class PurchaseLedgerImport extends Importer
                 Countries.valueOf(csvRecord.get(SHIPPED_TO_COUNTRY)),
                 Channels.valueOf(csvRecord.get(SHIPPED_TO_CHANNEL)),
                 invoiceNumber,lineCounter, invoiceUuid, Currencies.valueOf(csvRecord.get(CURRENCY)),
-                PurchaseLedgerTransactionType.valueOf(csvRecord.get(TRANSACTION_TYPE)),true,false,null,null);
+                PurchaseLedgerTransactionType.valueOf(csvRecord.get(TRANSACTION_TYPE)),true,
+                false,null,null);
 
         // stock relevant invoices are associated with themselves
         purchaseLedgerLine.setProperty("associatedTransactionGroupReference",(invoiceNumber));
@@ -145,7 +169,7 @@ public class PurchaseLedgerImport extends Importer
         dbManagerPurchaseLedger.persistTarget(purchaseLedgerLine);
     }
 
-    private void importCosLine(CSVRecord csvRecord, String transactionType)
+    private void importPositiveCosLine(CSVRecord csvRecord, String transactionType)
     {
         int transactionGroupKey = Integer.valueOf(csvRecord.get(ASSOCIATED_TRANSACTION_GROUP_KEY));
         int transactionLineKey = Integer.valueOf(csvRecord.get(ASSOCIATED_TRANSACTION_LINE_KEY));
@@ -213,7 +237,8 @@ public class PurchaseLedgerImport extends Importer
                 csvRecord.get(DESCRIPTION), productKey,
                 Integer.valueOf(csvRecord.get(QUANTITY)),
                 Double.valueOf(csvRecord.get(PRICE)), Double.valueOf(csvRecord.get(VAT)),
-                csvRecord.get(VAT_CODE),null,null,null,invoiceNumber,lineCounter, invoiceUuid,
+                csvRecord.get(VAT_CODE),null,null,null,
+                invoiceNumber,lineCounter, invoiceUuid,
                 Currencies.valueOf(csvRecord.get(CURRENCY)),
                 PurchaseLedgerTransactionType.valueOf(transactionType),
                 false,true, transactionGroupKey, transactionLineKey);
@@ -230,14 +255,17 @@ public class PurchaseLedgerImport extends Importer
     private void importOverheadLine(CSVRecord csvRecord)
     {
         int quantity = (csvRecord.get(QUANTITY).isEmpty() ? 1 : Integer.valueOf(csvRecord.get(QUANTITY)));
+        
         purchaseLedgerLine = new PurchaseLedgerLine(csvRecord.get(INVOICE_DATE),
                 csvRecord.get(SUPPLIER_ID), csvRecord.get(EXTERNAL_INVOICE_REFERENCE),
                 csvRecord.get(DESCRIPTION), csvRecord.get(PRODUCT_KEY),
                 quantity,
                 Double.valueOf(csvRecord.get(PRICE)), Double.valueOf(csvRecord.get(VAT)),
-                csvRecord.get(VAT_CODE),null,null,null,invoiceNumber,lineCounter, invoiceUuid,
+                csvRecord.get(VAT_CODE),null,null,null,
+                invoiceNumber,lineCounter, invoiceUuid,
                 Currencies.valueOf(csvRecord.get(CURRENCY)),
-                PurchaseLedgerTransactionType.valueOf(csvRecord.get(TRANSACTION_TYPE)),false,false,0,0);
+                PurchaseLedgerTransactionType.valueOf(csvRecord.get(TRANSACTION_TYPE)),
+                false,false,0,0);
 
         dbManagerPurchaseLedger.persistTarget(purchaseLedgerLine);
     }

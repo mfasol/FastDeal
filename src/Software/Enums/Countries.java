@@ -1,7 +1,5 @@
 package Software.Enums;
 
-import static com.sun.tools.doclets.internal.toolkit.util.DocletConstants.NL;
-import static java.time.chrono.ThaiBuddhistEra.BE;
 
 /**
  * Created by Michele on 08/11/2015.
@@ -21,6 +19,7 @@ public enum  Countries
     GB,
     GG,
     GR,
+    HR,
     HU,
     IE,
     IM,

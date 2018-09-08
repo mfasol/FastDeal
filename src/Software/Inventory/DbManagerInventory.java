@@ -60,9 +60,7 @@ public class DbManagerInventory implements DbManagerInterface
                     "INVENTORY_ITEM_STORE_TIMESTAMP, TRANSACTION_TYPE, TRANSACTION_UUID )" +
                     " VALUES (?, ?, ?, ?, ?, ?, ?, ROUND(?,12), ?, ?, ?, ?, ?, ?, ?)");
 
-
-            DateConverter dateConverter = new DateConverter();
-            java.sql.Date sqlDate = dateConverter.convert(inventoryItem.getProperty("itemDate").toString());
+            java.sql.Date sqlDate = DateConverter.convert(inventoryItem.getProperty("itemDate").toString());
 
             preparedStatement.setInt(1, Integer.parseInt(inventoryItem.
                     getProperty("internalInvoiceReference").toString()));
@@ -193,7 +191,8 @@ public class DbManagerInventory implements DbManagerInterface
     } //TODO
 
     public void updateInventoryItemStatus(String concatenatedKey, UUID itemUUID,
-                                          InventoryItemStatus inventoryItemStatus, String country, String saleChannel)
+                                          InventoryItemStatus inventoryItemStatus, String country, String saleChannel,
+                                          String adjustmentDate)
     {
         queryTableName = TABLE_NAME+"_"+country+"_"+saleChannel;
 
@@ -202,15 +201,18 @@ public class DbManagerInventory implements DbManagerInterface
             Class.forName(connectionData.getCLASS_FOR_NAME());
             Connection connection = DriverManager.getConnection(connectionData.getCONNECTION_PATH());
 
+            java.sql.Date sqlDate = DateConverter.convert(adjustmentDate);
+
             preparedStatement = connection.prepareStatement("UPDATE " + queryTableName +
                     " SET INVENTORY_ITEM_STATUS = (?) WHERE " +
                     "CONCATENATED_PRIMARY_KEY = (?) AND SINGLE_ITEM_UUID = (?) AND " +
-                    "INVENTORY_TRANSACTION_LOCKED = (?)");
+                    "INVENTORY_TRANSACTION_LOCKED = (?) AND ADJUSTMENT_DATE = (?)");
 
             preparedStatement.setString(1, String.valueOf(inventoryItemStatus));
             preparedStatement.setString(2, concatenatedKey);
             preparedStatement.setString(3, String.valueOf(itemUUID));
             preparedStatement.setBoolean(4, false);
+            preparedStatement.setDate(5, sqlDate);
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -232,9 +234,8 @@ public class DbManagerInventory implements DbManagerInterface
             Connection connection = DriverManager.getConnection(connectionData.getCONNECTION_PATH());
 
             preparedStatement = connection.prepareStatement("SELECT * FROM " + queryTableName +
-                    " WHERE SINGLE_ITEM_UUID = (SELECT MIN(SINGLE_ITEM_UUID) " +
-                    "FROM " + queryTableName + " WHERE PRODUCT_KEY = (?) AND " +
-                    "INVENTORY_ITEM_STATUS = (?))");
+                    " WHERE PRODUCT_KEY = (?) AND  INVENTORY_ITEM_STATUS = (?) " +
+                    "ORDER BY (INVENTORY_ITEM_STORE_TIMESTAMP) ASC LIMIT 1");
 
             preparedStatement.setString(1, productKey);
             preparedStatement.setString(2, String.valueOf(InventoryItemStatus.AVAILABLE_FOR_SALE));
@@ -282,6 +283,45 @@ public class DbManagerInventory implements DbManagerInterface
         }
 
         return inventoryItem;
+    }
+
+    public void adjustWriteOffItem(String productKey, String saleChannel, String adjustmentDate, Countries country) {
+
+        inventoryItem = getItemForSale(productKey, String.valueOf(country), saleChannel);
+
+        String primaryKey = inventoryItem.getProperty("primaryKey").toString();
+
+        UUID uuid = UUID.fromString(inventoryItem.getProperty("itemUuid").toString());
+        updateInventoryItemStatus(primaryKey, uuid, InventoryItemStatus.ADJUSTMENT_WRITE_OFF, String.valueOf(country), saleChannel,
+                adjustmentDate);
+
+    }
+
+    public void adjustCheckInItems(InventoryItem inventoryItem) {
+
+        persistInventoryItem(inventoryItem);
+
+    }
+
+    public void transferInventoryItem(String productKey, String transferredTo, String transferredFrom, String date,
+                                      Countries country)
+    {
+        inventoryItem = getItemForSale(productKey, String.valueOf(country), transferredFrom);
+
+        // Mark item as transferred in source inventory table
+        String primaryKey = inventoryItem.getProperty("primaryKey").toString();
+        UUID uuid = UUID.fromString(inventoryItem.getProperty("itemUuid").toString());
+        updateInventoryItemStatus(primaryKey, uuid, InventoryItemStatus.TRANSFERRED_TO, String.valueOf(country),
+                transferredFrom,
+                date);
+
+        // Persist item in destination inventory table
+        String itemDate = inventoryItem.getProperty("itemDate").toString();
+        itemDate = itemDate.substring(8,10) + "/" + itemDate.substring(5,7) + "/" + itemDate.substring(0,4);
+        inventoryItem.setProperty("saleChannel", transferredTo);
+        inventoryItem.setProperty("itemDate", itemDate);
+        inventoryItem.setProperty("inventoryItemTransactionTypes",InventoryItemTransactionTypes.TRANSFERRED_FROM);
+        persistInventoryItem(inventoryItem);
     }
 
     public static double round(double unrounded)

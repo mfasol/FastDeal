@@ -12,7 +12,6 @@ public class DateConverterTest
     @Test
     public void testConvert() throws Exception
     {
-        DateConverter dateConverter = new DateConverter();
-        System.out.println(dateConverter.convert("01/01/2015"));
+        System.out.println(DateConverter.convert("01/01/2015"));
     }
 }

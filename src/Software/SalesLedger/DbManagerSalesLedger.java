@@ -13,7 +13,7 @@ import Software.Utilities.Importable;
 import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.UUID;
+
 
 /**
  * Created by Michele on 26/11/2015.
@@ -201,63 +201,6 @@ public class DbManagerSalesLedger implements DbManagerInterface
             e.printStackTrace();
         }
 
-    }
-
-    public void flagForRefund(String transactionUUID)
-    {
-        try
-        {
-            Class.forName(connectionData.getCLASS_FOR_NAME());
-            Connection connection = DriverManager.getConnection(connectionData.getCONNECTION_PATH());
-
-            preparedStatement = connection.prepareStatement("UPDATE SALES_LEDGER SET " +
-                    "IS_REFUNDED = TRUE WHERE TRANSACTION_LINE_UUID = (?)");
-
-            preparedStatement.setString(1, transactionUUID);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-
-        }
-        catch (ClassNotFoundException | SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-    }
-
-    public SalesLedgerLine getItemForRefund(String externalId, String productId)
-    {
-        try
-        {
-            Class.forName(connectionData.getCLASS_FOR_NAME());
-            Connection connection = DriverManager.getConnection(connectionData.getCONNECTION_PATH());
-
-            preparedStatement = connection.prepareStatement("SELECT * FROM SALES_LEDGER WHERE " +
-                    "TRANSACTION_LINE_UUID = (SELECT(MIN(TRANSACTION_LINE_UUID)) FROM SALES_LEDGER /**/" +
-                    "WHERE EXTERNAL_TRANSACTION_ID = (?) AND PRODUCT_KEY = (?) AND TRANSACTION_STATUS = (?)" +
-                    "AND IS_REFUNDED = FALSE)");
-
-            preparedStatement.setString(1, externalId);
-            preparedStatement.setString(2, productId);
-            preparedStatement.setString(3, String.valueOf(SaleLedgerTransactionType.SALE));
-
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next())
-            {
-                salesLedgerLine = toSalesLedgerLine(resultSet);
-            }
-
-            resultSet.close();
-            preparedStatement.close();
-
-        }
-        catch (ClassNotFoundException | SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return salesLedgerLine;
     }
 
     public int internalTransactionNumberGenerator()

@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
 
-import static com.sun.tools.doclint.Entity.ne;
+
 
 /**
  * Created by Michele on 03/11/2015.
@@ -136,14 +136,11 @@ public class DbManagerPurchaseLedger implements DbManagerInterface
 
             preparedStatement.close();
             resultSet.close();
-
         }
         catch (ClassNotFoundException | SQLException e)
         {
             e.printStackTrace();
         }
-
-
         return transactionsList;
     }
 

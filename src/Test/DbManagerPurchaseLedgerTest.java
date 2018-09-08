@@ -106,16 +106,17 @@ public class DbManagerPurchaseLedgerTest
         PurchaseLedgerLine testLine =  dbManagerPurchaseLedger.retrieveTransactionLine(1,1);
         assert (testLine.getProperty("currency").equals(Currencies.GBP));
         assert (Integer.parseInt(testLine.getProperty("quantity").toString())==96);
-        assert (Double.parseDouble(testLine.getProperty("price").toString())==212.16);
-        assert (testLine.getProperty("transactionLineUUID").toString().equals("c8afe020-8e52-11e5-80d9-1211ca9464ab"));
-        assert (testLine.getProperty("invoiceUuid").toString().equals("c8afb910-8e52-11e5-80d9-1211ca9464ab"));
-        assert (testLine.getProperty("purchaseLedgerTransactionType").equals(PurchaseLedgerTransactionType.ACCRUAL));
+        assert (Double.parseDouble(testLine.getProperty("price").toString())==-184.31);
+        assert (testLine.getProperty("transactionLineUUID").toString().equals("5db50130-5673-11e6-821e-2a8d2b544dc2"));
+        assert (testLine.getProperty("invoiceUuid").toString().equals("5db48c00-5673-11e6-821e-2a8d2b544dc2"));
+        assert (testLine.getProperty("purchaseLedgerTransactionType").equals(PurchaseLedgerTransactionType.INVOICE));
         assert (testLine.getProperty("shippedFromCountry").equals(Countries.IT));
         assert (testLine.getProperty("shippedToCountry").equals(Countries.GB));
         assert (testLine.getProperty("shippedToChannel").equals(Channels.AMAZON));
-        assert (testLine.getProperty("date").equals("2015-10-28"));
+        assert (testLine.getProperty("date").equals("2015-10-11"));
         assert (testLine.getProperty("supplierID").equals("AllBrands"));
-        assert (testLine.getProperty("description").equals("Accrual as invoice has not been received yet"));
+        assert (testLine.getProperty("description").equals("Proraso crema barba vaso anti irrit. 150 ml " +
+                "36491 322.00 1.73 20% 557.06"));
         assert (testLine.getProperty("productKey").equals("Proraso Crema Anti - Irritazione"));
 
     }

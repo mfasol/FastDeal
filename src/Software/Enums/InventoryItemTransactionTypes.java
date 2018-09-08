@@ -8,6 +8,7 @@ public enum InventoryItemTransactionTypes
     PURCHASE,
     RETURN,
     BLANK,
+    TRANSFERRED_FROM
     ;
 
     public static boolean contains(String inventoryItemTransactionType)

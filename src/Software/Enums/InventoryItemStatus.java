@@ -10,7 +10,8 @@ public enum InventoryItemStatus
     TRANSFERRED_TO,
     TRANSFERRED_FROM,
     DISPOSED,
-    REFUNDED;
+    REFUNDED,
+    ADJUSTMENT_WRITE_OFF, TRANSFER;
 
     public static boolean contains(String inventoryItemStatus)
     {

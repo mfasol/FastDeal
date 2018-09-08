@@ -9,7 +9,8 @@ import org.junit.Test;
 public class ProductTest
 {
 
-    Product testProduct = new Product("BJK1SSK", "12425151065", "1215151415", "bdydbdbwdwbd","Proraso","13/10/2015" );
+    Product testProduct = new Product("BJK1SSK", "12425151065", "1215151415",
+            "bdydbdbwdwbd","Proraso","13/10/2015" );
 
     @Test
     public void testToString() throws Exception

@@ -36,7 +36,8 @@ public class DbManagerSalesLedgerTest
     @Test
     public void testRetrieveSaleLedgerTransaction() throws Exception
     {
-        System.out.println(dbManagerSalesLedger.getTransactionByExternalId("205-8088969-6662712","Proraso Sapone Tubo Rinfrescante"));
+        System.out.println(dbManagerSalesLedger.getTransactionByExternalId("205-8088969-6662712",
+                "Proraso Sapone Tubo Rinfrescante"));
     }
 
     @Test
@@ -50,18 +51,10 @@ public class DbManagerSalesLedgerTest
     {
         try
         {
-            System.out.println(dbManagerSalesLedger.getTransactionByUUID("1dc96860-97bd-11e5-ba4e-be53ae3a8f5c").getProperties());
+            System.out.println(dbManagerSalesLedger.getTransactionByUUID(
+                    "1dc96860-97bd-11e5-ba4e-be53ae3a8f5c").getProperties());
         }
         catch (NullPointerException npe){}
     }
 
-    @Test
-    public void testGetItemForRefund() throws Exception
-    {
-        try
-        {
-            System.out.println(dbManagerSalesLedger.getItemForRefund("205-8559649-3864336", "Proraso Sapone Ciotola Anti - Irritazion").getProperties());
-        }
-        catch (NullPointerException npe){}
-    }
 }
