@@ -29,6 +29,15 @@ public class DbManagerInventoryTest
     DbManagerInventory mockDatabase = mock(DbManagerInventory.class);
     DbManagerInventory dbManagerInventory = new DbManagerInventory();
 
+    @Test
+    public void testPersistTarget() throws Exception
+    {
+        System.out.println(importableTest.toString());
+        mockDatabase.persistTarget(importableTest);
+
+        verify(mockDatabase, times(1)).persistTarget(importableTest);
+    }
+
     @Before
     public void setUp() throws Exception
     {
@@ -40,15 +49,6 @@ public class DbManagerInventoryTest
 
     {
 
-    }
-
-    @Test
-    public void testPersistTarget() throws Exception
-    {
-        System.out.println(importableTest.toString());
-        mockDatabase.persistTarget(importableTest);
-
-        verify(mockDatabase, times(1)).persistTarget(importableTest);
     }
 
     @Test

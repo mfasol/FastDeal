@@ -1,0 +1,8 @@
+Invoice Date	Supplier	Invoice Ref	Description	Product Key	Quantity	Price	VAT	VAT code	Inventory Relevant	Shipped from country	Shipped To country	Shipped to channel	CURRENCY	COS Relevant	Transaction COS	Transaction Line	Transaction Type
+28/09/2016	Amazon	Bubble Wrap - 2016-09-28	Bubble Wrap - 2016-09-28		1	-114.72	0.00	No VAT					GBP	YES	56	7	INVOICE
+28/09/2016	Amazon	Poly Bagging - 2016-09-28	Poly Bagging - 2016-09-28		1	-36	0.00	No VAT					GBP	YES	56	4	INVOICE
+28/09/2016	Amazon	Taping Fee - 2016-09-28	Taping Fee - 2016-09-28		1	-21.6	0.00	No VAT					GBP	YES	56	2	INVOICE
+28/09/2016	Amazon	Label fee - 2016-09-28	Label fee - 2016-09-28		1	-207.72	0.00	No VAT					GBP	YES	56	0	INVOICE
+01/10/2016	Adstral	104663	Delivery Fees		1	-187.98	0.00	No VAT					GBP	YES	56	0	INVOICE
+27/12/2016	Amazon	Label fee - 2016-12-27	Label fee - 2016-12-27		1	-320.58	0.00	No VAT					GBP	YES	57	0	INVOICE
+27/12/2016	Amazon	Poly Bagging - 2016-12-27	Poly Bagging - 2016-12-27		1	-96.9	0.00	No VAT					GBP	YES	57	5	INVOICE
